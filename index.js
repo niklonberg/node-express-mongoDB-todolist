@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const port = 3000;
 const users = require("./users.json");
+const usersBroken = require("./usersbroken.json");
 
 const app = express();
 app.use(cors());
@@ -16,4 +17,8 @@ app.get("/", (req, res) => {
 
 app.get("/users", (req, res) => {
   res.json(users);
+});
+
+app.get("usersbroken", (req, res) => {
+  res.json(usersBroken);
 });
