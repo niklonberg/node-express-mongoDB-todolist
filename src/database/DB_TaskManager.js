@@ -31,4 +31,4 @@ class DB_TaskManager {
   }
 }
 
-export default DB_TaskManager;
+module.exports = DB_TaskManager;

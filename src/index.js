@@ -2,7 +2,10 @@
 // app.use(cors());
 const express = require("express");
 const dotenv = require("dotenv");
-const users = require("../users.json");
+
+/* temp db class import */
+const DB_TaskManager = require("./database/DB_TaskManager");
+const db_TaskManager = new DB_TaskManager();
 
 /*
  * Load up and parse configuration details from
@@ -18,6 +21,7 @@ dotenv.config();
  */
 const app = express();
 const port = process.env.PORT;
+const allowedOrigin = process.env.ALLOWED_ORIGIN;
 
 /* Start the Express app and listen
  for incoming requests on the specified port */
@@ -25,16 +29,23 @@ app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
 
-/* Define a route for the root path ("/")
+/* Define a route for the path ("/tasks")
  using the HTTP GET method */
-app.get("/", (req, res) => {
-  res.send("hello world");
-});
-
-app.get("/users", (req, res) => {
-  res.json(users);
+app.get("/tasks", (req, res) => {
+  if (req.headers.origin === allowedOrigin || !req.headers.origin) {
+    res.header("Access-Control-Allow-Origin", allowedOrigin);
+    res.header("Access-Control-Allow-Methods", "GET");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
+  }
+  res.send("hello");
+  // const tasks = await db_TaskManager.getTasks();
 });
 
 app.post("/users", (req, res) => {
-  // write the users that were sent from frontent to this endpoint into the database
+  // write the users that were sent from frontend to this endpoint into the database
 });
+
+/* testing */
