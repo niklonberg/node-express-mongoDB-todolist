@@ -1,5 +1,5 @@
 {
-  "name": "nodejs-todolist-server",
+  "name": "node-express-mongodb-todolist",
   "version": "1.0.0",
   "description": "hello",
   "main": "src/index.js",
