@@ -1,11 +1,8 @@
+// const cors = require("cors");
+// app.use(cors());
 const express = require("express");
-const cors = require("cors");
 const port = 3000;
-const users = require("./users.json");
-const usersBroken = require("./usersbroken.json");
-
 const app = express();
-app.use(cors());
 
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
@@ -19,6 +16,6 @@ app.get("/users", (req, res) => {
   res.json(users);
 });
 
-app.get("usersbroken", (req, res) => {
-  res.json(usersBroken);
+app.post("/users", (req, res) => {
+  // write the users that were sent from frontent to this endpoint into the database
 });
