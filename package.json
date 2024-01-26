@@ -1,11 +1,9 @@
 {
-  "name": "nodejs-todolist-server",
+  "name": "node-express-mongodb-todolist",
   "version": "1.0.0",
   "description": "hello",
   "main": "src/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "scripts": {},
   "author": "",
   "license": "ISC",
   "dependencies": {
