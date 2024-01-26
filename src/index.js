@@ -1,7 +1,8 @@
 // const cors = require("cors");
 // app.use(cors());
-import express, { Express, Request, Response } from "express";
-import dotenv from "dotenv";
+const express = require("express");
+const dotenv = require("dotenv");
+const users = require("../users.json");
 
 /*
  * Load up and parse configuration details from
@@ -15,7 +16,7 @@ dotenv.config();
  * value of the PORT environment variable
  * from the `process.env`
  */
-const app: Express = express();
+const app = express();
 const port = process.env.PORT;
 
 /* Start the Express app and listen
@@ -26,12 +27,12 @@ app.listen(port, () => {
 
 /* Define a route for the root path ("/")
  using the HTTP GET method */
-app.get("/", (req: Request, res: Response) => {
+app.get("/", (req, res) => {
   res.send("hello world");
 });
 
 app.get("/users", (req, res) => {
-  // res.json(users);
+  res.json(users);
 });
 
 app.post("/users", (req, res) => {

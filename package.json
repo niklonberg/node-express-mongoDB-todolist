@@ -1,13 +1,9 @@
 {
-  "name": "nodejs-todolist-server",
+  "name": "node-express-mongodb-todolist",
   "version": "1.0.0",
   "description": "hello",
-  "main": "dist/index.js",
-  "scripts": {
-    "build": "npx tsc",
-    "start": "node dist/index.js",
-    "dev": "nodemon src/index.ts"
-  },
+  "main": "src/index.js",
+  "scripts": {},
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -15,12 +11,5 @@
     "dotenv": "^16.4.1",
     "express": "^4.18.2",
     "mongodb": "^6.3.0"
-  },
-  "devDependencies": {
-    "@types/express": "^4.17.21",
-    "@types/node": "^20.11.7",
-    "nodemon": "^3.0.3",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
   }
 }
