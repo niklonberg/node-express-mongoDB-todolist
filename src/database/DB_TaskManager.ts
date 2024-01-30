@@ -1,8 +1,11 @@
-const { MongoClient } = require("mongodb");
+import { MongoClient, Collection } from "mongodb";
+import { Task, Subtask } from "../interfaces";
+
 const uri = "mongodb://localhost:27017";
 const MDBclient = new MongoClient(uri, { monitorCommands: true });
 
 class DB_TaskManager {
+  private tasks: Collection<Task>;
   constructor() {
     this.tasks = MDBclient.db("TaskManager").collection("tasks");
 
@@ -10,7 +13,9 @@ class DB_TaskManager {
   }
 
   // or use below function in all CRUD tasks?
-  async manageDbOperation(operation) {
+  async manageDbOperation<T>(
+    operation: () => Promise<T>
+  ): Promise<T | undefined> {
     try {
       await MDBclient.connect();
       console.log("Connection to TaskManager DB opened");
@@ -23,7 +28,7 @@ class DB_TaskManager {
     }
   }
 
-  async getTasks() {
+  async getTasks(): Promise<Task[] | undefined> {
     return await this.manageDbOperation(async () => {
       const tasks = await this.tasks.find().toArray();
       console.log("db task log: ", tasks);
@@ -35,7 +40,19 @@ class DB_TaskManager {
     return await this.manageDbOperation(async () => {});
   }
 
+  async getSubtasks() {
+    return await this.manageDbOperation(async () => {});
+  }
+
+  async getSubtask() {
+    return await this.manageDbOperation(async () => {});
+  }
+
   async createTask() {
+    return await this.manageDbOperation(async () => {});
+  }
+
+  async createSubtask() {
     return await this.manageDbOperation(async () => {});
   }
 
@@ -43,9 +60,17 @@ class DB_TaskManager {
     return await this.manageDbOperation(async () => {});
   }
 
+  async updateSubtask() {
+    return await this.manageDbOperation(async () => {});
+  }
+
   async deleteTask() {
+    return await this.manageDbOperation(async () => {});
+  }
+
+  async deleteSubtask() {
     return await this.manageDbOperation(async () => {});
   }
 }
 
-module.exports = DB_TaskManager;
+export default DB_TaskManager;

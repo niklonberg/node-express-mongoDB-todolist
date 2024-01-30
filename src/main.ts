@@ -1,11 +1,11 @@
 // const cors = require("cors");
 // app.use(cors());
-const express = require("express");
-const dotenv = require("dotenv");
+import express, { Express, Request, Response } from "express";
+import dotenv from "dotenv";
 
 /* temp db class import */
-const DB_TaskManager = require("./database/DB_TaskManager");
-const db_TaskManager = new DB_TaskManager();
+import DB_TaskManager from "./database/DB_TaskManager";
+const TaskManager = new DB_TaskManager();
 
 /*
  * Load up and parse configuration details from
@@ -19,7 +19,7 @@ dotenv.config();
  * value of the PORT environment variable
  * from the `process.env`
  */
-const app = express();
+const app: Express = express();
 const port = process.env.PORT;
 const allowedOrigin = process.env.ALLOWED_ORIGIN;
 
@@ -31,7 +31,7 @@ app.listen(port, () => {
 
 /* Define a route for the path ("/tasks")
  using the HTTP GET method */
-app.get("/tasks", async (req, res) => {
+app.get("/tasks", async (req: Request, res: Response) => {
   try {
     if (req.headers.origin === allowedOrigin || !req.headers.origin) {
       res.header("Access-Control-Allow-Origin", allowedOrigin);
@@ -41,7 +41,7 @@ app.get("/tasks", async (req, res) => {
         "Origin, X-Requested-With, Content-Type, Accept"
       );
     }
-    const tasks = await db_TaskManager.getTasks();
+    const tasks = await TaskManager.getTasks();
     console.log("express task log: ", tasks);
     res.json(tasks);
   } catch (error) {
@@ -50,11 +50,9 @@ app.get("/tasks", async (req, res) => {
   }
 });
 
-app.post("/createtask", (req, res) => {
+app.post("/createtask", (req: Request, res: Response) => {
   // this endpoint is responsible for creating new task
   // when todoForm submits it submits here
   // i need some way to track whether it is toplevel or subtask
   // this would use the TaskManagerService class here to do relevant things
 });
-
-/* testing */
