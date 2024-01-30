@@ -14,7 +14,7 @@ class DB_TaskManager {
     try {
       await MDBclient.connect();
       console.log("Connection to TaskManager DB opened");
-      await operation();
+      return await operation();
     } catch (error) {
       console.error("Error setting up connection: ", error);
     } finally {
@@ -24,10 +24,27 @@ class DB_TaskManager {
   }
 
   async getTasks() {
-    await this.manageDbOperation(async () => {
+    return await this.manageDbOperation(async () => {
       const tasks = await this.tasks.find().toArray();
+      console.log("db task log: ", tasks);
       return tasks;
     });
+  }
+
+  async getTask() {
+    return await this.manageDbOperation(async () => {});
+  }
+
+  async createTask() {
+    return await this.manageDbOperation(async () => {});
+  }
+
+  async updateTask() {
+    return await this.manageDbOperation(async () => {});
+  }
+
+  async deleteTask() {
+    return await this.manageDbOperation(async () => {});
   }
 }
 

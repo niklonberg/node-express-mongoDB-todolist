@@ -31,21 +31,30 @@ app.listen(port, () => {
 
 /* Define a route for the path ("/tasks")
  using the HTTP GET method */
-app.get("/tasks", (req, res) => {
-  if (req.headers.origin === allowedOrigin || !req.headers.origin) {
-    res.header("Access-Control-Allow-Origin", allowedOrigin);
-    res.header("Access-Control-Allow-Methods", "GET");
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept"
-    );
+app.get("/tasks", async (req, res) => {
+  try {
+    if (req.headers.origin === allowedOrigin || !req.headers.origin) {
+      res.header("Access-Control-Allow-Origin", allowedOrigin);
+      res.header("Access-Control-Allow-Methods", "GET");
+      res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+      );
+    }
+    const tasks = await db_TaskManager.getTasks();
+    console.log("express task log: ", tasks);
+    res.json(tasks);
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    res.status(500).send("Internal Server Error");
   }
-  res.send("hello");
-  // const tasks = await db_TaskManager.getTasks();
 });
 
-app.post("/users", (req, res) => {
-  // write the users that were sent from frontend to this endpoint into the database
+app.post("/createtask", (req, res) => {
+  // this endpoint is responsible for creating new task
+  // when todoForm submits it submits here
+  // i need some way to track whether it is toplevel or subtask
+  // this would use the TaskManagerService class here to do relevant things
 });
 
 /* testing */
