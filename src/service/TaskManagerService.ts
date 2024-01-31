@@ -44,9 +44,11 @@ class TaskManagerService implements TaskManagerInterface {
 
   getTodaySubtasks(): Subtask[] {
     return this.getTasks().reduce(
-      (acc, curr) => [
+      (acc: Subtask[], curr) => [
         ...acc,
-        ...curr.subtasks.filter((subtask) => isToday(subtask.dueDate)),
+        ...curr.subtasks.filter(
+          (subtask) => subtask.dueDate && isToday(subtask.dueDate)
+        ),
       ],
       []
     );

@@ -30,7 +30,7 @@ class TaskManagerService {
     getTodaySubtasks() {
         return this.getTasks().reduce((acc, curr) => [
             ...acc,
-            ...curr.subtasks.filter((subtask) => (0, date_fns_1.isToday)(subtask.dueDate)),
+            ...curr.subtasks.filter((subtask) => subtask.dueDate && (0, date_fns_1.isToday)(subtask.dueDate)),
         ], []);
     }
     getNext7DaysSubtasks() {
