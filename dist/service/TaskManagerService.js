@@ -38,10 +38,11 @@ class TaskManagerService {
         const sevenDaysLater = (0, date_fns_1.addDays)(today, 7);
         return this.getTasks().reduce((acc, curr) => [
             ...acc,
-            ...curr.subtasks.filter((subtask) => (0, date_fns_1.isWithinInterval)(subtask.dueDate, {
-                start: today,
-                end: sevenDaysLater,
-            })),
+            ...curr.subtasks.filter((subtask) => subtask.dueDate &&
+                (0, date_fns_1.isWithinInterval)(subtask.dueDate, {
+                    start: today,
+                    end: sevenDaysLater,
+                })),
         ], []);
     }
     /* Edit methods */
