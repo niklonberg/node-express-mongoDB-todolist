@@ -51,7 +51,15 @@ class TaskManagerService {
         this.currSelectedTask = this.getTask(taskID);
     }
     resetSelectedTodo() {
-        this.currSelectedTodo = null;
+        this.currSelectedTask = null;
+    }
+    /* Add methods */
+    addTask(task) {
+        this.tasks.push(task);
+    }
+    addSubtask(subtask) {
+        var _a;
+        (_a = this.currSelectedTask) === null || _a === void 0 ? void 0 : _a.subtasks.push(subtask);
     }
     /* Edit methods */
     editTodo(todoToEdit, newTodo, todoArray = this.topLevelTodos) {
@@ -89,16 +97,6 @@ class TaskManagerService {
         this.topLevelTodos = this.topLevelTodos.filter((todo) => todo.todoID !== todoToReorder.todoID);
         this.topLevelTodos.splice(indexToReorderTodoTo, 0, todoToReorder);
         setTimeout(() => console.log("Toplevel Todos after: ", this.topLevelTodos), 0);
-    }
-    /* Add methods */
-    addTodo(todo) {
-        if (this.currSelectedTodo) {
-            this.currSelectedTodo.children.push(todo);
-        }
-        else {
-            this.topLevelTodos.push(todo);
-        }
-        console.log(this.topLevelTodos);
     }
     /* Delete methods */
     deleteTopLevelTodo(todoID) {

@@ -3,7 +3,7 @@ form submit method needs to change between
 post and put depending on whether an edit or new task
 */
 
-import { isToday, addDays, isWithinInterval } from "date-fns";
+import { isToday, addDays, isWithinInterval, sub } from "date-fns";
 import {
   Task,
   Subtask,
@@ -79,8 +79,17 @@ class TaskManagerService implements TaskManagerInterface {
     this.currSelectedTask = this.getTask(taskID);
   }
 
-  resetSelectedTodo(): void {
-    this.currSelectedTodo = null;
+  resetSelectedTodo() {
+    this.currSelectedTask = null;
+  }
+
+  /* Add methods */
+  addTask(task: Task) {
+    this.tasks.push(task);
+  }
+
+  addSubtask(subtask: Subtask) {
+    this.currSelectedTask?.subtasks.push(subtask);
   }
 
   /* Edit methods */
@@ -137,16 +146,6 @@ class TaskManagerService implements TaskManagerInterface {
       () => console.log("Toplevel Todos after: ", this.topLevelTodos),
       0
     );
-  }
-
-  /* Add methods */
-  addTodo(todo: Todo): void {
-    if (this.currSelectedTodo) {
-      this.currSelectedTodo.children.push(todo);
-    } else {
-      this.topLevelTodos.push(todo);
-    }
-    console.log(this.topLevelTodos);
   }
 
   /* Delete methods */

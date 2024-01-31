@@ -33,7 +33,7 @@ export interface TaskManagerInterface {
   getNext7DaysSubtasks(): Subtask[];
   setSelectedTask(taskID: number): void;
   resetSelectedTask(): void;
-  addTask(task: Task, parentTodo?: Task): void;
+  addTask(task: Task): void;
   addSubtask(subtask: Subtask): void;
   deleteTask(taskID: number): void;
   deleteSubtask(todoID: number): void;
