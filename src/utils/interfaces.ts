@@ -1,7 +1,7 @@
 type PriorityLevel = "Low" | "Medium" | "High";
 
 export interface Task {
-  _id?: string;
+  _id: string;
   sortOrder: number;
   title: string;
   priority: PriorityLevel;
@@ -12,13 +12,23 @@ export interface Task {
   subtasks: Task[];
 }
 
+export interface Subtask extends Omit<Task, "_id" | "sortOrder"> {}
+
+// do we need this?
+export interface TaskListItemWithDataset extends HTMLElement {
+  dataset: {
+    task: string;
+  };
+}
+
 /* eslint-disable no-unused-vars */
 export interface TaskManagerInterface {
-  // topLevelTodos: Todo[];
-  currSelectedTask: Task;
-  task: Task | null;
+  tasks: Task[];
+  currSelectedTask: null | Task;
   getTasks(): Task[];
-  getTask(taskID: number, taskArray: Task[]): Task;
+  getTask(taskID: number): Task;
+  getSubtasks(): Task[];
+  getSubtask(): Task;
   getTodayTasks(): Task[];
   getNext7DaysTasks(): Task[];
   setSelectedTask(taskID: number): void;
@@ -32,5 +42,3 @@ export interface TaskManagerInterface {
   reorderTask(index: number, taskListItem: TaskListItemWithDataset): void;
 }
 /* eslint-disable no-unused-vars */
-
-// export interface Subtask extends Omit<Task, "_id"> {}

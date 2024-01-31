@@ -4,7 +4,6 @@ form submit method needs to change between
 post and put depending on whether an edit or new task
 */
 Object.defineProperty(exports, "__esModule", { value: true });
-const date_fns_1 = require("date-fns");
 /**
  * Transfers data between endpoints and database.
  * @param projects - The project containing the Todos.
@@ -12,12 +11,14 @@ const date_fns_1 = require("date-fns");
  * @returns The Todo with the specified ID.
  */
 class TaskManagerService {
+    // parentTodo: null | Task;
     constructor() {
-        this.topLevelTodos = [];
+        this.tasks = []; // get tasks from db and set here.
+        this.currSelectedTask = null;
     }
     /* Get methods */
-    getTopLevelTodos() {
-        return this.topLevelTodos;
+    getTasks() {
+        return this.tasks;
     }
     getTodo(todoID, todoArray = this.topLevelTodos) {
         let todoWeAreSearchingFor = null;
@@ -42,17 +43,17 @@ class TaskManagerService {
         const todos = this.getTopLevelTodos();
         return todos.reduce((acc, curr) => [
             ...acc,
-            ...curr.children.filter((childTodo) => (0, date_fns_1.isToday)(childTodo.dueDate)),
+            ...curr.children.filter((childTodo) => isToday(childTodo.dueDate)),
         ], []);
     }
     getNext7DaysTasks() {
         const todos = this.getTopLevelTodos();
         const today = new Date();
         today.setHours(0, 0, 0);
-        const sevenDaysLater = (0, date_fns_1.addDays)(today, 7);
+        const sevenDaysLater = addDays(today, 7);
         return todos.reduce((acc, curr) => [
             ...acc,
-            ...curr.children.filter((childTodo) => (0, date_fns_1.isWithinInterval)(childTodo.dueDate, {
+            ...curr.children.filter((childTodo) => isWithinInterval(childTodo.dueDate, {
                 start: today,
                 end: sevenDaysLater,
             })),

@@ -3,11 +3,11 @@ form submit method needs to change between
 post and put depending on whether an edit or new task
 */
 
-import { isToday, addDays, isWithinInterval } from "date-fns";
+// import { isToday, addDays, isWithinInterval } from "date-fns";
 import {
   Task,
   TaskManagerInterface,
-  TodoListItemWithDataset,
+  TaskListItemWithDataset,
 } from "../utils/interfaces";
 
 /**
@@ -17,22 +17,20 @@ import {
  * @returns The Todo with the specified ID.
  */
 class TaskManagerService implements TaskManagerInterface {
-  // private user: User;
+  private tasks: Task[];
 
-  private topLevelTodos: Todo[];
+  currSelectedTask: null | Task;
 
-  currSelectedTodo: null | Todo; // Should we bother with this?
-  // could just split addTodo into two functions.
-
-  parentTodo: Todo | null; // we need me?
+  // parentTodo: null | Task;
 
   constructor() {
-    this.topLevelTodos = [];
+    this.tasks = []; // get tasks from db and set here.
+    this.currSelectedTask = null;
   }
 
   /* Get methods */
-  getTopLevelTodos(): Todo[] {
-    return this.topLevelTodos;
+  getTasks(): Task[] {
+    return this.tasks;
   }
 
   getTodo(todoID: number, todoArray: Todo[] = this.topLevelTodos): Todo {
