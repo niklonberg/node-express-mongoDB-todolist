@@ -33,14 +33,12 @@ class TaskManagerService {
             ...curr.subtasks.filter((subtask) => (0, date_fns_1.isToday)(subtask.dueDate)),
         ], []);
     }
-    getNext7DaysTasks() {
-        const todos = this.getTopLevelTodos();
-        const today = new Date();
-        today.setHours(0, 0, 0);
+    getNext7DaysSubtasks() {
+        const today = new Date().setHours(0, 0, 0);
         const sevenDaysLater = (0, date_fns_1.addDays)(today, 7);
-        return todos.reduce((acc, curr) => [
+        return this.getTasks().reduce((acc, curr) => [
             ...acc,
-            ...curr.children.filter((childTodo) => (0, date_fns_1.isWithinInterval)(childTodo.dueDate, {
+            ...curr.subtasks.filter((subtask) => (0, date_fns_1.isWithinInterval)(subtask.dueDate, {
                 start: today,
                 end: sevenDaysLater,
             })),

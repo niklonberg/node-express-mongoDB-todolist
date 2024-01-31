@@ -52,16 +52,14 @@ class TaskManagerService implements TaskManagerInterface {
     );
   }
 
-  getNext7DaysTasks() {
-    const todos = this.getTopLevelTodos();
-    const today = new Date();
-    today.setHours(0, 0, 0);
+  getNext7DaysSubtasks() {
+    const today = new Date().setHours(0, 0, 0);
     const sevenDaysLater = addDays(today, 7);
-    return todos.reduce(
+    return this.getTasks().reduce(
       (acc, curr) => [
         ...acc,
-        ...curr.children.filter((childTodo) =>
-          isWithinInterval(childTodo.dueDate, {
+        ...curr.subtasks.filter((subtask) =>
+          isWithinInterval(subtask.dueDate, {
             start: today,
             end: sevenDaysLater,
           })
