@@ -22,7 +22,8 @@ class TaskManagerService {
         return this.tasks;
     }
     getTask(taskID) {
-        return this.tasks.find((task) => task._id === taskID);
+        const foundTask = this.tasks.find((task) => task._id === taskID);
+        return foundTask || null;
     }
     getSubtasks(task) {
         return task.subtasks;
@@ -44,6 +45,13 @@ class TaskManagerService {
                     end: sevenDaysLater,
                 })),
         ], []);
+    }
+    /* Set methods */
+    setSelectedTodo(taskID) {
+        this.currSelectedTask = this.getTask(taskID);
+    }
+    resetSelectedTodo() {
+        this.currSelectedTodo = null;
     }
     /* Edit methods */
     editTodo(todoToEdit, newTodo, todoArray = this.topLevelTodos) {
@@ -81,15 +89,6 @@ class TaskManagerService {
         this.topLevelTodos = this.topLevelTodos.filter((todo) => todo.todoID !== todoToReorder.todoID);
         this.topLevelTodos.splice(indexToReorderTodoTo, 0, todoToReorder);
         setTimeout(() => console.log("Toplevel Todos after: ", this.topLevelTodos), 0);
-    }
-    /* Set methods */
-    setSelectedTodo(todoID) {
-        console.log("todoID is: ", todoID);
-        this.currSelectedTodo = this.getTodo(todoID);
-        console.log("curr selected todo: ", this.currSelectedTodo);
-    }
-    resetSelectedTodo() {
-        this.currSelectedTodo = null;
     }
     /* Add methods */
     addTodo(todo) {

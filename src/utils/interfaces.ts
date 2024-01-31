@@ -24,9 +24,9 @@ export interface TaskListItemWithDataset extends HTMLElement {
 /* eslint-disable no-unused-vars */
 export interface TaskManagerInterface {
   tasks: Task[];
-  currSelectedTask: null | Task;
+  currSelectedTask: Task | null;
   getTasks(): Task[];
-  getTask(taskID: string): Task | undefined;
+  getTask(taskID: string): Task | null;
   getSubtasks(task: Task): Subtask[];
   getSubtask(): Subtask;
   getTodaySubtasks(): Subtask[];

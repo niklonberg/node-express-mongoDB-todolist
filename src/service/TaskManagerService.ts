@@ -20,7 +20,7 @@ import {
 class TaskManagerService implements TaskManagerInterface {
   private tasks: Task[];
 
-  private currSelectedTask: Task;
+  private currSelectedTask: Task | null;
 
   // parentTodo: null | Task;
 
@@ -34,15 +34,16 @@ class TaskManagerService implements TaskManagerInterface {
     return this.tasks;
   }
 
-  getTask(taskID: string) {
-    return this.tasks.find((task) => task._id === taskID);
+  getTask(taskID: string): Task | null {
+    const foundTask = this.tasks.find((task) => task._id === taskID);
+    return foundTask || null;
   }
 
   getSubtasks(task: Task) {
     return task.subtasks;
   }
 
-  getTodaySubtasks(): Subtask[] {
+  getTodaySubtasks() {
     return this.getTasks().reduce(
       (acc: Subtask[], curr) => [
         ...acc,
@@ -71,6 +72,15 @@ class TaskManagerService implements TaskManagerInterface {
       ],
       []
     );
+  }
+
+  /* Set methods */
+  setSelectedTodo(taskID: string) {
+    this.currSelectedTask = this.getTask(taskID);
+  }
+
+  resetSelectedTodo(): void {
+    this.currSelectedTodo = null;
   }
 
   /* Edit methods */
@@ -127,17 +137,6 @@ class TaskManagerService implements TaskManagerInterface {
       () => console.log("Toplevel Todos after: ", this.topLevelTodos),
       0
     );
-  }
-
-  /* Set methods */
-  setSelectedTodo(todoID: number): void {
-    console.log("todoID is: ", todoID);
-    this.currSelectedTodo = this.getTodo(todoID);
-    console.log("curr selected todo: ", this.currSelectedTodo);
-  }
-
-  resetSelectedTodo(): void {
-    this.currSelectedTodo = null;
   }
 
   /* Add methods */
