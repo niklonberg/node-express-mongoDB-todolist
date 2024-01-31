@@ -9,7 +9,7 @@ export interface Task {
   dateCompleted: null | Date;
   dueDate: null | Date;
   description?: string;
-  subtasks: Task[];
+  subtasks: Subtask[];
 }
 
 export interface Subtask extends Omit<Task, "_id" | "sortOrder"> {}
@@ -25,10 +25,10 @@ export interface TaskListItemWithDataset extends HTMLElement {
 export interface TaskManagerInterface {
   tasks: Task[];
   currSelectedTask: null | Task;
-  getTasks(): undefined[];
+  getTasks(): Task[];
   getTask(taskID: string): Task | undefined;
-  getSubtasks(): Task[];
-  getSubtask(): Task;
+  getSubtasks(task: Task): Subtask[];
+  getSubtask(): Subtask;
   getTodayTasks(): Task[];
   getNext7DaysTasks(): Task[];
   setSelectedTask(taskID: number): void;

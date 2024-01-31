@@ -37,6 +37,10 @@ class TaskManagerService implements TaskManagerInterface {
     return this.tasks.find((task) => task._id === taskID);
   }
 
+  getSubtasks(task: Task) {
+    return task.subtasks;
+  }
+
   getTodayTasks(): Todo[] {
     const todos = this.getTopLevelTodos();
     return todos.reduce(
