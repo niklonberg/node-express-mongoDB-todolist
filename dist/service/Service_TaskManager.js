@@ -18,7 +18,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class Service_TaskManager {
     // parentTodo: null | Task;
     constructor(DBTaskManagerInstance) {
-        this.DBTaskManager = DBTaskManagerInstance;
+        this.TaskManagerDB = DBTaskManagerInstance;
         this.tasks = [];
         this.currSelectedTask = null;
         this.init();

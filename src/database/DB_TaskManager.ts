@@ -2,29 +2,35 @@ import { MongoClient, Collection } from "mongodb";
 import { Task } from "../utils/interfaces";
 
 const uri = "mongodb://localhost:27017";
-const MDBclient = new MongoClient(uri, { monitorCommands: true });
 
 class DB_TaskManager {
+  private MDBclient: MongoClient;
   private tasks: Collection<Task>;
-  constructor() {
-    this.tasks = MDBclient.db("TaskManager").collection("tasks");
 
-    // we could set up connection upon instantiation and keep it up?
+  constructor() {
+    this.MDBclient = new MongoClient(uri, { monitorCommands: true });
+    this.tasks = this.MDBclient.db("TaskManager").collection("tasks");
+
+    this.connect();
   }
 
-  // or use below function in all CRUD tasks?
-  async manageDbOperation<T>(
-    operation: () => Promise<T>
-  ): Promise<T | undefined> {
+  private async connect() {
     try {
-      await MDBclient.connect();
-      console.log("Connection to TaskManager DB opened");
+      await this.MDBclient.connect();
+      console.log("Connection to TaskManagerDB opened");
+    } catch (error) {
+      console.error("Error setting up connection to TaskManagerDB: ", error);
+    }
+  }
+
+  async manageDbOperation<T>(operation: () => Promise<T>) {
+    try {
+      console.log("Attempting DB operation");
       return await operation();
     } catch (error) {
-      console.error("Error setting up connection: ", error);
+      console.error("Error during operation: ", error);
     } finally {
-      await MDBclient.close();
-      console.log("Connection to TaskManager DB closed");
+      console.log("DB operation ended");
     }
   }
 

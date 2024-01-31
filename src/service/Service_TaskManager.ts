@@ -18,11 +18,11 @@ class Service_TaskManager implements TaskManagerInterface {
 
   currSelectedTask: Task | null;
 
-  DBTaskManager: DB_TaskManager;
+  TaskManagerDB: DB_TaskManager;
   // parentTodo: null | Task;
 
   constructor(DBTaskManagerInstance: DB_TaskManager) {
-    this.DBTaskManager = DBTaskManagerInstance;
+    this.TaskManagerDB = DBTaskManagerInstance;
     this.tasks = [];
     this.currSelectedTask = null;
     this.init();

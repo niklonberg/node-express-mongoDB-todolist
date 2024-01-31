@@ -11,26 +11,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongodb_1 = require("mongodb");
 const uri = "mongodb://localhost:27017";
-const MDBclient = new mongodb_1.MongoClient(uri, { monitorCommands: true });
 class DB_TaskManager {
     constructor() {
-        this.tasks = MDBclient.db("TaskManager").collection("tasks");
-        // we could set up connection upon instantiation and keep it up?
+        this.MDBclient = new mongodb_1.MongoClient(uri, { monitorCommands: true });
+        this.tasks = this.MDBclient.db("TaskManager").collection("tasks");
+        this.connect();
     }
-    // or use below function in all CRUD tasks?
+    connect() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield this.MDBclient.connect();
+                console.log("Connection to TaskManagerDB opened");
+            }
+            catch (error) {
+                console.error("Error setting up connection to TaskManagerDB: ", error);
+            }
+        });
+    }
     manageDbOperation(operation) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield MDBclient.connect();
-                console.log("Connection to TaskManager DB opened");
+                console.log("Attempting DB operation");
                 return yield operation();
             }
             catch (error) {
-                console.error("Error setting up connection: ", error);
+                console.error("Error during operation: ", error);
             }
             finally {
-                yield MDBclient.close();
-                console.log("Connection to TaskManager DB closed");
+                console.log("DB operation ended");
             }
         });
     }
