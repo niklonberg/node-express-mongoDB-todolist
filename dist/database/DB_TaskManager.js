@@ -48,6 +48,11 @@ class DB_TaskManager {
             return yield this.manageDbOperation(() => __awaiter(this, void 0, void 0, function* () { }));
         });
     }
+    getSubtasks() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.manageDbOperation(() => __awaiter(this, void 0, void 0, function* () { }));
+        });
+    }
     getSubtask() {
         return __awaiter(this, void 0, void 0, function* () {
             return yield this.manageDbOperation(() => __awaiter(this, void 0, void 0, function* () { }));
@@ -58,12 +63,27 @@ class DB_TaskManager {
             return yield this.manageDbOperation(() => __awaiter(this, void 0, void 0, function* () { }));
         });
     }
+    createSubtask() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.manageDbOperation(() => __awaiter(this, void 0, void 0, function* () { }));
+        });
+    }
     updateTask() {
         return __awaiter(this, void 0, void 0, function* () {
             return yield this.manageDbOperation(() => __awaiter(this, void 0, void 0, function* () { }));
         });
     }
+    updateSubtask() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.manageDbOperation(() => __awaiter(this, void 0, void 0, function* () { }));
+        });
+    }
     deleteTask() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.manageDbOperation(() => __awaiter(this, void 0, void 0, function* () { }));
+        });
+    }
+    deleteSubtask() {
         return __awaiter(this, void 0, void 0, function* () {
             return yield this.manageDbOperation(() => __awaiter(this, void 0, void 0, function* () { }));
         });
