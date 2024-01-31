@@ -92,6 +92,16 @@ class TaskManagerService implements TaskManagerInterface {
     this.currSelectedTask?.subtasks.push(subtask);
   }
 
+  /* Delete methods */
+  deleteTask(taskID: string) {
+    this.tasks = this.tasks.filter((task) => task._id !== taskID);
+  }
+
+  deleteSubtask(taskID: string): void {
+    const task = this.getTask(taskID);
+    // task.subtasks = task?.subtasks.filter((subtask) => subtask !== todo);
+  }
+
   /* Edit methods */
   editTodo(
     todoToEdit: Todo,
@@ -145,21 +155,6 @@ class TaskManagerService implements TaskManagerInterface {
     setTimeout(
       () => console.log("Toplevel Todos after: ", this.topLevelTodos),
       0
-    );
-  }
-
-  /* Delete methods */
-  deleteTopLevelTodo(todoID: number): void {
-    this.topLevelTodos = this.topLevelTodos.filter(
-      (todo) => todo.todoID !== todoID
-    );
-  }
-
-  deleteChildTodo(todoID: number): void {
-    const todo = this.getTodo(todoID);
-    console.log("todo to delete: ", todo);
-    this.parentTodo.children = this.parentTodo.children.filter(
-      (childTodo) => childTodo !== todo
     );
   }
 }

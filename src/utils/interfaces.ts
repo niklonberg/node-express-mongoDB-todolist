@@ -35,7 +35,7 @@ export interface TaskManagerInterface {
   resetSelectedTask(): void;
   addTask(task: Task): void;
   addSubtask(subtask: Subtask): void;
-  deleteTask(taskID: number): void;
+  deleteTask(taskID: string): void;
   deleteSubtask(todoID: number): void;
   editTask(taskToEdit: Task, newTask: Task): void;
   toggleIsCompleted(taskID: number): Task;

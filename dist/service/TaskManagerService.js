@@ -61,6 +61,14 @@ class TaskManagerService {
         var _a;
         (_a = this.currSelectedTask) === null || _a === void 0 ? void 0 : _a.subtasks.push(subtask);
     }
+    /* Delete methods */
+    deleteTask(taskID) {
+        this.tasks = this.tasks.filter((task) => task._id !== taskID);
+    }
+    deleteSubtask(taskID) {
+        const task = this.getTask(taskID);
+        // task.subtasks = task?.subtasks.filter((subtask) => subtask !== todo);
+    }
     /* Edit methods */
     editTodo(todoToEdit, newTodo, todoArray = this.topLevelTodos) {
         const foundTodo = todoArray.find((currTodo) => currTodo.todoID === todoToEdit.todoID);
@@ -97,15 +105,6 @@ class TaskManagerService {
         this.topLevelTodos = this.topLevelTodos.filter((todo) => todo.todoID !== todoToReorder.todoID);
         this.topLevelTodos.splice(indexToReorderTodoTo, 0, todoToReorder);
         setTimeout(() => console.log("Toplevel Todos after: ", this.topLevelTodos), 0);
-    }
-    /* Delete methods */
-    deleteTopLevelTodo(todoID) {
-        this.topLevelTodos = this.topLevelTodos.filter((todo) => todo.todoID !== todoID);
-    }
-    deleteChildTodo(todoID) {
-        const todo = this.getTodo(todoID);
-        console.log("todo to delete: ", todo);
-        this.parentTodo.children = this.parentTodo.children.filter((childTodo) => childTodo !== todo);
     }
 }
 exports.default = TaskManagerService;
