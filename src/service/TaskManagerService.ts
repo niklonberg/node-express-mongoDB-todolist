@@ -3,9 +3,10 @@ form submit method needs to change between
 post and put depending on whether an edit or new task
 */
 
-// import { isToday, addDays, isWithinInterval } from "date-fns";
+import { isToday, addDays, isWithinInterval } from "date-fns";
 import {
   Task,
+  Subtask,
   TaskManagerInterface,
   TaskListItemWithDataset,
 } from "../utils/interfaces";
@@ -19,13 +20,13 @@ import {
 class TaskManagerService implements TaskManagerInterface {
   private tasks: Task[];
 
-  currSelectedTask: null | Task;
+  private currSelectedTask: Task;
 
   // parentTodo: null | Task;
 
   constructor() {
     this.tasks = []; // get tasks from db and set here.
-    this.currSelectedTask = null;
+    this.currSelectedTask = this.tasks[0];
   }
 
   /* Get methods */
@@ -41,12 +42,11 @@ class TaskManagerService implements TaskManagerInterface {
     return task.subtasks;
   }
 
-  getTodayTasks(): Todo[] {
-    const todos = this.getTopLevelTodos();
-    return todos.reduce(
+  getTodaySubtasks(): Subtask[] {
+    return this.getTasks().reduce(
       (acc, curr) => [
         ...acc,
-        ...curr.children.filter((childTodo) => isToday(childTodo.dueDate)),
+        ...curr.subtasks.filter((subtask) => isToday(subtask.dueDate)),
       ],
       []
     );

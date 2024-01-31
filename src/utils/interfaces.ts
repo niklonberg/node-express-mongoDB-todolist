@@ -29,11 +29,12 @@ export interface TaskManagerInterface {
   getTask(taskID: string): Task | undefined;
   getSubtasks(task: Task): Subtask[];
   getSubtask(): Subtask;
-  getTodayTasks(): Task[];
-  getNext7DaysTasks(): Task[];
+  getTodaySubtasks(): Subtask[];
+  getNext7DaysSubtasks(): Subtask[];
   setSelectedTask(taskID: number): void;
   resetSelectedTask(): void;
   addTask(task: Task, parentTodo?: Task): void;
+  addSubtask(subtask: Subtask): void;
   deleteTask(taskID: number): void;
   deleteSubtask(todoID: number): void;
   editTask(taskToEdit: Task, newTask: Task): void;
