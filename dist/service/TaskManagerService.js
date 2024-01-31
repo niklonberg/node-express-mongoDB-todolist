@@ -20,24 +20,8 @@ class TaskManagerService {
     getTasks() {
         return this.tasks;
     }
-    getTodo(todoID, todoArray = this.topLevelTodos) {
-        let todoWeAreSearchingFor = null;
-        todoArray.forEach((childTodo) => {
-            if (childTodo.todoID === todoID) {
-                todoWeAreSearchingFor = childTodo;
-                this.parentTodo = null;
-            }
-            else {
-                const foundTodo = this.getTodo(todoID, childTodo.children);
-                if (foundTodo) {
-                    todoWeAreSearchingFor = foundTodo;
-                    this.parentTodo = childTodo;
-                    console.log("parent todo is: ", this.parentTodo);
-                    console.log("todo we searched for is: ", todoWeAreSearchingFor);
-                }
-            }
-        });
-        return todoWeAreSearchingFor;
+    getTask(taskID) {
+        return this.tasks.find((task) => task._id === taskID);
     }
     getTodayTasks() {
         const todos = this.getTopLevelTodos();

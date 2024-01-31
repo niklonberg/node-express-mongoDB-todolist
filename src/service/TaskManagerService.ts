@@ -29,28 +29,12 @@ class TaskManagerService implements TaskManagerInterface {
   }
 
   /* Get methods */
-  getTasks(): Task[] {
+  getTasks() {
     return this.tasks;
   }
 
-  getTodo(todoID: number, todoArray: Todo[] = this.topLevelTodos): Todo {
-    let todoWeAreSearchingFor: Todo = null;
-    todoArray.forEach((childTodo) => {
-      if (childTodo.todoID === todoID) {
-        todoWeAreSearchingFor = childTodo;
-        this.parentTodo = null;
-      } else {
-        const foundTodo = this.getTodo(todoID, childTodo.children);
-        if (foundTodo) {
-          todoWeAreSearchingFor = foundTodo;
-          this.parentTodo = childTodo;
-          console.log("parent todo is: ", this.parentTodo);
-          console.log("todo we searched for is: ", todoWeAreSearchingFor);
-        }
-      }
-    });
-
-    return todoWeAreSearchingFor;
+  getTask(taskID: string) {
+    return this.tasks.find((task) => task._id === taskID);
   }
 
   getTodayTasks(): Todo[] {

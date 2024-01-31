@@ -25,8 +25,8 @@ export interface TaskListItemWithDataset extends HTMLElement {
 export interface TaskManagerInterface {
   tasks: Task[];
   currSelectedTask: null | Task;
-  getTasks(): Task[];
-  getTask(taskID: number): Task;
+  getTasks(): undefined[];
+  getTask(taskID: string): Task | undefined;
   getSubtasks(): Task[];
   getSubtask(): Task;
   getTodayTasks(): Task[];
