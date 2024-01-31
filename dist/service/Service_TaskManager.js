@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @param todoID - The ID of the Todo to retrieve.
  * @returns The Todo with the specified ID.
  */
-class TaskManagerService {
+class Service_TaskManager {
     // parentTodo: null | Task;
     constructor(DBTaskManagerInstance) {
         this.DBTaskManager = DBTaskManagerInstance;
@@ -39,7 +39,7 @@ class TaskManagerService {
         return this.tasks;
     }
 }
-exports.default = TaskManagerService;
+exports.default = Service_TaskManager;
 /*
 form submit method needs to change between
 post and put depending on whether an edit or new task

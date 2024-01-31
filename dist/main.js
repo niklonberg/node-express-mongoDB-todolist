@@ -16,9 +16,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // app.use(cors());
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
-/* temp db class import */
 const DB_TaskManager_1 = __importDefault(require("./database/DB_TaskManager"));
-const TaskManager = new DB_TaskManager_1.default();
+const Service_TaskManager_1 = __importDefault(require("./service/Service_TaskManager"));
+const TaskManagerDB = new DB_TaskManager_1.default();
+const TaskManagerService = new Service_TaskManager_1.default(TaskManagerDB);
 /*
  * Load up and parse configuration details from
  * the `.env` file to the `process.env`
@@ -47,7 +48,7 @@ app.get("/tasks", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             res.header("Access-Control-Allow-Methods", "GET");
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         }
-        const tasks = yield TaskManager.getTasks();
+        const tasks = TaskManagerService.getTasks();
         console.log("express task log: ", tasks);
         res.json(tasks);
     }

@@ -39,7 +39,7 @@ class DB_TaskManager {
             return yield this.manageDbOperation(() => __awaiter(this, void 0, void 0, function* () {
                 const tasks = yield this.tasks.find().toArray();
                 console.log("db task log: ", tasks);
-                return tasks;
+                return tasks || [];
             }));
         });
     }

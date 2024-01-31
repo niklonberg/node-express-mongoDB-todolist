@@ -2,10 +2,11 @@
 // app.use(cors());
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
-
-/* temp db class import */
 import DB_TaskManager from "./database/DB_TaskManager";
-const TaskManager = new DB_TaskManager();
+import Service_TaskManager from "./service/Service_TaskManager";
+
+const TaskManagerDB = new DB_TaskManager();
+const TaskManagerService = new Service_TaskManager(TaskManagerDB);
 
 /*
  * Load up and parse configuration details from
@@ -41,7 +42,7 @@ app.get("/tasks", async (req: Request, res: Response) => {
         "Origin, X-Requested-With, Content-Type, Accept"
       );
     }
-    const tasks = await TaskManager.getTasks();
+    const tasks = TaskManagerService.getTasks();
     console.log("express task log: ", tasks);
     res.json(tasks);
   } catch (error) {

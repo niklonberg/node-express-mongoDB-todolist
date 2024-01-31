@@ -28,11 +28,11 @@ class DB_TaskManager {
     }
   }
 
-  async getTasks(): Promise<Task[] | undefined> {
+  async getTasks() {
     return await this.manageDbOperation(async () => {
       const tasks = await this.tasks.find().toArray();
       console.log("db task log: ", tasks);
-      return tasks;
+      return tasks || [];
     });
   }
 

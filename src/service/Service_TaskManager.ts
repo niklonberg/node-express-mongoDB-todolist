@@ -13,7 +13,7 @@ import {
  * @param todoID - The ID of the Todo to retrieve.
  * @returns The Todo with the specified ID.
  */
-class TaskManagerService implements TaskManagerInterface {
+class Service_TaskManager implements TaskManagerInterface {
   tasks: Task[];
 
   currSelectedTask: Task | null;
@@ -21,10 +21,20 @@ class TaskManagerService implements TaskManagerInterface {
   DBTaskManager: DB_TaskManager;
   // parentTodo: null | Task;
 
-  constructor() {
-    this.DBTaskManager = new DB_TaskManager();
-    this.tasks = []; // get tasks from db and set here.
-    this.currSelectedTask = this.tasks[0];
+  constructor(DBTaskManagerInstance: DB_TaskManager) {
+    this.DBTaskManager = DBTaskManagerInstance;
+    this.tasks = [];
+    this.currSelectedTask = null;
+    this.init();
+  }
+
+  private async init() {
+    try {
+      this.tasks = await this.DBTaskManager.getTasks();
+      this.currSelectedTask = this.tasks[0];
+    } catch (error) {
+      console.error("Error during TaskManagerService init: ", error);
+    }
   }
 
   /* Get methods */
@@ -148,7 +158,7 @@ class TaskManagerService implements TaskManagerInterface {
   // }
 }
 
-export default TaskManagerService;
+export default Service_TaskManager;
 
 /* 
 form submit method needs to change between
