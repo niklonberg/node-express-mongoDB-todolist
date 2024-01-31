@@ -29,7 +29,9 @@ class TaskManagerService {
         var _a;
         return (_a = this.getTask(taskID)) === null || _a === void 0 ? void 0 : _a.subtasks;
     }
-    getSubtask() { }
+    getSubtask() {
+        // implementation here
+    }
     getTodaySubtasks() {
         return this.getTasks().reduce((acc, curr) => [
             ...acc,
@@ -69,17 +71,11 @@ class TaskManagerService {
     }
     deleteSubtask(taskID) {
         const task = this.getTask(taskID);
-        // task.subtasks = task?.subtasks.filter((subtask) => subtask !== todo);
+        task.subtasks = task === null || task === void 0 ? void 0 : task.subtasks.filter((subtask) => subtask !== todo);
     }
     /* Edit methods */
-    editTodo(todoToEdit, newTodo, todoArray = this.topLevelTodos) {
-        const foundTodo = todoArray.find((currTodo) => currTodo.todoID === todoToEdit.todoID);
-        if (foundTodo) {
-            Object.assign(foundTodo, Object.assign(Object.assign({}, newTodo), { children: foundTodo.children }));
-        }
-        else {
-            todoArray.forEach((childTodo) => this.editTodo(todoToEdit, newTodo, childTodo.children));
-        }
+    editTask(taskToEdit, newTaskProps) {
+        Object.assign(taskToEdit, Object.assign({}, newTaskProps));
     }
     toggleIsCompleted(todoID) {
         const todo = this.getTodo(todoID);

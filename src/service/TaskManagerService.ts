@@ -43,7 +43,9 @@ class TaskManagerService implements TaskManagerInterface {
     return this.getTask(taskID)?.subtasks;
   }
 
-  getSubtask() {}
+  getSubtask() {
+    // implementation here
+  }
 
   getTodaySubtasks() {
     return this.getTasks().reduce(
@@ -101,25 +103,12 @@ class TaskManagerService implements TaskManagerInterface {
 
   deleteSubtask(taskID: string): void {
     const task = this.getTask(taskID);
-    // task.subtasks = task?.subtasks.filter((subtask) => subtask !== todo);
+    task.subtasks = task?.subtasks.filter((subtask) => subtask !== todo);
   }
 
   /* Edit methods */
-  editTodo(
-    todoToEdit: Todo,
-    newTodo: Todo,
-    todoArray: Todo[] = this.topLevelTodos
-  ): void {
-    const foundTodo = todoArray.find(
-      (currTodo) => currTodo.todoID === todoToEdit.todoID
-    );
-    if (foundTodo) {
-      Object.assign(foundTodo, { ...newTodo, children: foundTodo.children });
-    } else {
-      todoArray.forEach((childTodo) =>
-        this.editTodo(todoToEdit, newTodo, childTodo.children)
-      );
-    }
+  editTask(taskToEdit: Task, newTaskProps: Task) {
+    Object.assign(taskToEdit, { ...newTaskProps });
   }
 
   toggleIsCompleted(todoID: number): Todo {
