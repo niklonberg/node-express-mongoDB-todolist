@@ -39,9 +39,11 @@ class TaskManagerService implements TaskManagerInterface {
     return foundTask || null;
   }
 
-  getSubtasks(task: Task) {
-    return task.subtasks;
+  getSubtasks(taskID: string) {
+    return this.getTask(taskID)?.subtasks;
   }
+
+  getSubtask() {}
 
   getTodaySubtasks() {
     return this.getTasks().reduce(

@@ -25,9 +25,11 @@ class TaskManagerService {
         const foundTask = this.tasks.find((task) => task._id === taskID);
         return foundTask || null;
     }
-    getSubtasks(task) {
-        return task.subtasks;
+    getSubtasks(taskID) {
+        var _a;
+        return (_a = this.getTask(taskID)) === null || _a === void 0 ? void 0 : _a.subtasks;
     }
+    getSubtask() { }
     getTodaySubtasks() {
         return this.getTasks().reduce((acc, curr) => [
             ...acc,
