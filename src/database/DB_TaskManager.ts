@@ -1,5 +1,5 @@
 import { MongoClient, Collection } from "mongodb";
-import { Task, Subtask } from "../utils/interfaces";
+import { Task } from "../utils/interfaces";
 
 const uri = "mongodb://localhost:27017";
 const MDBclient = new MongoClient(uri, { monitorCommands: true });

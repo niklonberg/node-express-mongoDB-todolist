@@ -26,20 +26,20 @@ export interface TaskManagerInterface {
   tasks: Task[];
   currSelectedTask: Task | null;
   getTasks(): Task[];
-  getTask(taskID: string): Task | null;
-  getSubtasks(task: Task): Subtask[];
-  getSubtask(): Subtask;
-  getTodaySubtasks(): Subtask[];
-  getNext7DaysSubtasks(): Subtask[];
-  setSelectedTask(taskID: number): void;
-  resetSelectedTask(): void;
-  addTask(task: Task): void;
-  addSubtask(subtask: Subtask): void;
-  deleteTask(taskID: string): void;
-  deleteSubtask(todoID: number): void;
-  editTask(taskToEdit: Task, newTask: Task): void;
-  toggleIsCompleted(taskID: number): Task;
-  toggleCompletedDate(task: Task): void;
-  reorderTask(index: number, taskListItem: TaskListItemWithDataset): void;
+  // getTask(taskID: string): Task | null;
+  // getSubtasks(taskID: string): Subtask[];
+  // getSubtask(): Subtask;
+  // getTodaySubtasks(): Subtask[];
+  // getNext7DaysSubtasks(): Subtask[];
+  // setSelectedTask(taskID: number): void;
+  // resetSelectedTask(): void;
+  // addTask(task: Task): void;
+  // addSubtask(subtask: Subtask): void;
+  // deleteTask(taskID: string): void;
+  // deleteSubtask(todoID: number): void;
+  // editTask(taskToEdit: Task, newTaskProps: Task): void;
+  // toggleIsCompleted(taskID: number): Task;
+  // toggleCompletedDate(task: Task): void;
+  // reorderTask(index: number, taskListItem: TaskListItemWithDataset): void;
 }
 /* eslint-disable no-unused-vars */
