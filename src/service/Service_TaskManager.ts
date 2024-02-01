@@ -30,7 +30,7 @@ class Service_TaskManager implements TaskManagerInterface {
 
   private async init() {
     try {
-      this.tasks = await this.DBTaskManager.getTasks();
+      this.tasks = await this.TaskManagerDB.getTasks();
       this.currSelectedTask = this.tasks[0];
     } catch (error) {
       console.error("Error during TaskManagerService init: ", error);

@@ -9,10 +9,10 @@ export interface Task {
   dateCompleted: null | Date;
   dueDate: null | Date;
   description?: string;
-  subtasks: Subtask[];
+  subtasks: Task[];
 }
 
-export interface Subtask extends Omit<Task, "_id" | "sortOrder"> {}
+// export interface Subtask extends Omit<Task, "_id" | "sortOrder"> {}
 
 // do we need this?
 export interface TaskListItemWithDataset extends HTMLElement {
