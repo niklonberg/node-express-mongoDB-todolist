@@ -21,7 +21,7 @@ tasksRouter.use(
 
 tasksRouter.use(express.json());
 
-// GET
+// GET ALL
 tasksRouter.get("/", async (_req: Request, res: Response) => {
   try {
     const tasks = (await collections.tasks?.find({}).toArray()) as Task[];
@@ -29,6 +29,23 @@ tasksRouter.get("/", async (_req: Request, res: Response) => {
     res.status(200).send(tasks);
   } catch (error: any) {
     res.status(500).send(error.message);
+  }
+});
+
+// GET ONE BY ID
+tasksRouter.get("/:id", async (req: Request, res: Response) => {
+  const id = req?.params.id;
+
+  try {
+    const query = { _id: new ObjectId(id) };
+    const task = (await collections.tasks?.findOne(query)) as Task;
+
+    res.status(200).send(task);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(404)
+      .send(`Unable to find matching document with id: ${req.params.id}`);
   }
 });
 
