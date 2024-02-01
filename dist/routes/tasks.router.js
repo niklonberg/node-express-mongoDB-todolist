@@ -39,7 +39,7 @@ exports.tasksRouter.get("/", (_req, res) => __awaiter(void 0, void 0, void 0, fu
         res.status(500).send(error.message);
     }
 }));
-// GET BY ID
+// GET ONE BY ID
 exports.tasksRouter.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;
     const id = req === null || req === void 0 ? void 0 : req.params.id;

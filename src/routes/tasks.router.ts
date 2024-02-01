@@ -50,6 +50,20 @@ tasksRouter.get("/:id", async (req: Request, res: Response) => {
 });
 
 // POST
+tasksRouter.post("/", async (req: Request, res: Response) => {
+  try {
+    const newTask = req.body as Task;
+    const result = await collections.tasks?.insertOne(newTask);
+    result
+      ? res
+          .status(201)
+          .send(`Successfully created a new game with id ${result.insertedId}`)
+      : res.status(500).send("Failed to create a new game.");
+  } catch (error: any) {
+    console.error(error);
+    res.status(400).send(error.message);
+  }
+});
 
 // PUT
 
