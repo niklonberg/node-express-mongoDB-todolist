@@ -56,5 +56,22 @@ exports.tasksRouter.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
     }
 }));
 // POST
+exports.tasksRouter.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c;
+    console.log("Received POST request to /tasks:", req.body);
+    try {
+        const newTask = req.body;
+        const result = yield ((_c = database_service_1.collections.tasks) === null || _c === void 0 ? void 0 : _c.insertOne(newTask));
+        result
+            ? res
+                .status(201)
+                .send(`Successfully created a new task with id ${result.insertedId}`)
+            : res.status(500).send("Failed to create a new task.");
+    }
+    catch (error) {
+        console.error(error);
+        res.status(400).send(error.message);
+    }
+}));
 // PUT
 // DELETE
