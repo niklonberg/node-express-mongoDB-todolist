@@ -1,7 +1,8 @@
+import { ObjectId } from "mongodb";
 type PriorityLevel = "Low" | "Medium" | "High";
 
 export interface Task {
-  _id: string;
+  _id: ObjectId;
   sortOrder: number;
   title: string;
   priority: PriorityLevel;
