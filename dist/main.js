@@ -34,6 +34,8 @@ dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT;
 const allowedOrigin = process.env.ALLOWED_ORIGIN;
+const dbString = process.env.DB_CONN_STRING;
+console.log("db string: ", dbString);
 /* Start the Express app and listen
  for incoming requests on the specified port */
 app.listen(port, () => {

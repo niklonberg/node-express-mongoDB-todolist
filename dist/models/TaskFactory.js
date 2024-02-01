@@ -1,18 +1,16 @@
 "use strict";
-// import { FormTemplateObj, Todo } from './utils/interfaces';
-// let todoIDCounter: number = 0;
-// function TodoFactory(templateObj: FormTemplateObj): Task {
-//   const task: Task = {
-//     todoID: todoIDCounter,
-//     title: templateObj.title,
-//     priority: templateObj.priority || 'Low',
-//     isCompleted: false,
-//     dateCompleted: null,
-//     dueDate: templateObj.dueDate || null,
-//     description: templateObj.description,
-//     subtasks: [],
-//   };
-//   todoIDCounter += 1;
-//   return todo;
-// }
-// export default TodoFactory;
+Object.defineProperty(exports, "__esModule", { value: true });
+class TaskFactory {
+    constructor(title, priorityLevel, dueDate, description, subtasks, sortOrder, _id) {
+        this.title = title;
+        this.priorityLevel = priorityLevel;
+        this.dueDate = dueDate;
+        this.description = description;
+        this.subtasks = subtasks;
+        this.sortOrder = sortOrder;
+        this._id = _id;
+        this.isCompleted = false;
+        this.dateCompleted = null;
+    }
+}
+exports.default = TaskFactory;

@@ -1,4 +1,4 @@
-import { Task, Subtask } from "../utils/interfaces";
+import { Task } from "../utils/interfaces";
 import { ObjectId } from "mongodb";
 
 class TaskFactory {

@@ -2,7 +2,6 @@ import { isToday, addDays, isWithinInterval, sub } from "date-fns";
 import DB_TaskManager from "../database/DB_TaskManager";
 import {
   Task,
-  Subtask,
   TaskManagerInterface,
   TaskListItemWithDataset,
 } from "../utils/interfaces";
@@ -30,7 +29,7 @@ class Service_TaskManager implements TaskManagerInterface {
 
   private async init() {
     try {
-      this.tasks = await this.TaskManagerDB.getTasks();
+      // this.tasks = await this.TaskManagerDB.getTasks();
       this.currSelectedTask = this.tasks[0];
     } catch (error) {
       console.error("Error during TaskManagerService init: ", error);

@@ -26,7 +26,7 @@ class Service_TaskManager {
     init() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                this.tasks = yield this.TaskManagerDB.getTasks();
+                // this.tasks = await this.TaskManagerDB.getTasks();
                 this.currSelectedTask = this.tasks[0];
             }
             catch (error) {
