@@ -53,7 +53,13 @@ tasksRouter.get("/:id", async (req: Request, res: Response) => {
 tasksRouter.post("/", async (req: Request, res: Response) => {
   console.log("Received POST request to /tasks:", req.body);
   try {
+    const currentHighestSortOrderDoc = (await collections.tasks?.findOne(
+      {},
+      { sort: { sortOrder: -1 } }
+    )) as Task;
+    console.log("current highest sort order doc: ", currentHighestSortOrderDoc);
     const newTask = req.body as Task;
+    newTask.sortOrder = currentHighestSortOrderDoc.sortOrder! + 1;
     const result = await collections.tasks?.insertOne(newTask);
     result
       ? res

@@ -57,11 +57,14 @@ exports.tasksRouter.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
 }));
 // POST
 exports.tasksRouter.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _c;
+    var _c, _d;
     console.log("Received POST request to /tasks:", req.body);
     try {
+        const currentHighestSortOrderDoc = (yield ((_c = database_service_1.collections.tasks) === null || _c === void 0 ? void 0 : _c.findOne({}, { sort: { sortOrder: -1 } })));
+        console.log("current highest sort order doc: ", currentHighestSortOrderDoc);
         const newTask = req.body;
-        const result = yield ((_c = database_service_1.collections.tasks) === null || _c === void 0 ? void 0 : _c.insertOne(newTask));
+        newTask.sortOrder = currentHighestSortOrderDoc.sortOrder + 1;
+        const result = yield ((_d = database_service_1.collections.tasks) === null || _d === void 0 ? void 0 : _d.insertOne(newTask));
         result
             ? res
                 .status(201)

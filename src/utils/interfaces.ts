@@ -2,14 +2,14 @@ import { ObjectId } from "mongodb";
 type PriorityLevel = "Low" | "Medium" | "High";
 
 export interface Task {
-  _id: ObjectId;
-  sortOrder: number;
+  _id?: ObjectId;
+  sortOrder?: number;
   title: string;
   priority: PriorityLevel;
   isCompleted: boolean;
   dateCompleted: null | Date;
   dueDate: null | Date;
-  description?: string;
+  description: string;
   subtasks: Task[];
 }
 

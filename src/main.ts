@@ -10,6 +10,8 @@ connectToDatabase()
   .then(() => {
     app.use("/tasks", tasksRouter);
 
+    // app.use("/users", userRouter)
+
     app.listen(port, () => {
       console.log(`Server started at http://localhost:${port}`);
     });
