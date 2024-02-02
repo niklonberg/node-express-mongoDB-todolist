@@ -50,7 +50,8 @@ tasksRouter.get("/:id", async (req: Request, res: Response) => {
 });
 
 // POST
-tasksRouter.post("/", async (req: Request, res: Response) => {
+// create task
+tasksRouter.post("/createTask", async (req: Request, res: Response) => {
   console.log("Received POST request to /tasks:", req.body);
   try {
     const currentHighestSortOrderDoc = (await collections.tasks?.findOne(

@@ -1,16 +1,14 @@
 import express from "express";
 import { connectToDatabase } from "./service/database.service";
 import { tasksRouter } from "./routes/tasks.router";
-import dotenv from "dotenv";
-dotenv.config();
-const port = process.env.PORT;
+
 const app = express();
 
 connectToDatabase()
   .then(() => {
-    app.use("/tasks", tasksRouter);
+    const port = process.env.PORT;
 
-    // app.use("/users", userRouter)
+    app.use("/tasks", tasksRouter);
 
     app.listen(port, () => {
       console.log(`Server started at http://localhost:${port}`);
@@ -21,6 +19,7 @@ connectToDatabase()
     process.exit();
   });
 
+// prev
 // app.use(cors());
 // import express, { Express, Request, Response } from "express";
 // import dotenv from "dotenv";

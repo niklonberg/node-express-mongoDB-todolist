@@ -6,12 +6,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const database_service_1 = require("./service/database.service");
 const tasks_router_1 = require("./routes/tasks.router");
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-const port = process.env.PORT;
 const app = (0, express_1.default)();
 (0, database_service_1.connectToDatabase)()
     .then(() => {
+    const port = process.env.PORT;
     app.use("/tasks", tasks_router_1.tasksRouter);
     app.listen(port, () => {
         console.log(`Server started at http://localhost:${port}`);
@@ -21,6 +19,7 @@ const app = (0, express_1.default)();
     console.error("Database connection failed", error);
     process.exit();
 });
+// prev
 // app.use(cors());
 // import express, { Express, Request, Response } from "express";
 // import dotenv from "dotenv";

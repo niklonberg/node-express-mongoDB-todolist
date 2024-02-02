@@ -56,7 +56,8 @@ exports.tasksRouter.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
     }
 }));
 // POST
-exports.tasksRouter.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+// create task
+exports.tasksRouter.post("/createTask", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _c, _d;
     console.log("Received POST request to /tasks:", req.body);
     try {
