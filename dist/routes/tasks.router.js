@@ -32,7 +32,7 @@ exports.tasksRouter.use(express_1.default.json());
 exports.tasksRouter.get("/", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
-        const tasks = (yield ((_a = database_service_1.collections.tasks) === null || _a === void 0 ? void 0 : _a.find({}).toArray()));
+        const tasks = (yield ((_a = database_service_1.collections.tasks) === null || _a === void 0 ? void 0 : _a.find({}, { sort: { sortOrder: -1 } }).toArray()));
         res.status(200).send(tasks);
     }
     catch (error) {

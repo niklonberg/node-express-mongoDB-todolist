@@ -24,7 +24,9 @@ tasksRouter.use(express.json());
 // GET ALL
 tasksRouter.get("/", async (_req: Request, res: Response) => {
   try {
-    const tasks = (await collections.tasks?.find({}).toArray()) as Task[];
+    const tasks = (await collections.tasks
+      ?.find({}, { sort: { sortOrder: 1 } })
+      .toArray()) as Task[];
 
     res.status(200).send(tasks);
   } catch (error: any) {
