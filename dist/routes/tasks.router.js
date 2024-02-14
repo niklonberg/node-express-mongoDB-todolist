@@ -32,7 +32,7 @@ exports.tasksRouter.use(express_1.default.json());
 exports.tasksRouter.get("/", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
-        const tasks = (yield ((_a = database_service_1.collections.tasks) === null || _a === void 0 ? void 0 : _a.find({}, { sort: { sortOrder: -1 } }).toArray()));
+        const tasks = (yield ((_a = database_service_1.collections.tasks) === null || _a === void 0 ? void 0 : _a.find({}, { sort: { sortOrder: 1 } }).toArray()));
         res.status(200).send(tasks);
     }
     catch (error) {
@@ -59,17 +59,14 @@ exports.tasksRouter.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
 // create task
 exports.tasksRouter.post("/createTask", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _c, _d;
-    console.log("Received POST request to /tasks:", req.body);
+    console.log("Received POST request to /tasks/createTask:", req.body);
     try {
         const currentHighestSortOrderDoc = (yield ((_c = database_service_1.collections.tasks) === null || _c === void 0 ? void 0 : _c.findOne({}, { sort: { sortOrder: -1 } })));
-        console.log("current highest sort order doc: ", currentHighestSortOrderDoc);
         const newTask = req.body;
         newTask.sortOrder = currentHighestSortOrderDoc.sortOrder + 1;
         const result = yield ((_d = database_service_1.collections.tasks) === null || _d === void 0 ? void 0 : _d.insertOne(newTask));
         result
-            ? res
-                .status(201)
-                .send(`Successfully created a new task with id ${result.insertedId}`)
+            ? res.status(201).send(newTask)
             : res.status(500).send("Failed to create a new task.");
     }
     catch (error) {
@@ -79,3 +76,21 @@ exports.tasksRouter.post("/createTask", (req, res) => __awaiter(void 0, void 0, 
 }));
 // PUT
 // DELETE
+exports.tasksRouter.delete("/deleteTask/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _e;
+    const id = req === null || req === void 0 ? void 0 : req.params.id;
+    try {
+        const query = { _id: new mongodb_1.ObjectId(id) };
+        const result = yield ((_e = database_service_1.collections.tasks) === null || _e === void 0 ? void 0 : _e.deleteOne(query));
+        if ((result === null || result === void 0 ? void 0 : result.deletedCount) === 1) {
+            res.status(204).send();
+        }
+        else {
+            res.status(404).send(`Task with ID ${id} not found`);
+        }
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).send("Internal server error");
+    }
+}));

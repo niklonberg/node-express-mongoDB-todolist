@@ -1,6 +1,6 @@
 // External Dependencies
 import express, { Request, Response } from "express";
-import { ObjectId } from "mongodb";
+import { Db, ObjectId } from "mongodb";
 import { collections } from "../service/database.service";
 import TaskFactory from "../models/TaskFactory";
 import { Task } from "../utils/interfaces";
@@ -54,20 +54,17 @@ tasksRouter.get("/:id", async (req: Request, res: Response) => {
 // POST
 // create task
 tasksRouter.post("/createTask", async (req: Request, res: Response) => {
-  console.log("Received POST request to /tasks:", req.body);
+  console.log("Received POST request to /tasks/createTask:", req.body);
   try {
     const currentHighestSortOrderDoc = (await collections.tasks?.findOne(
       {},
       { sort: { sortOrder: -1 } }
     )) as Task;
-    console.log("current highest sort order doc: ", currentHighestSortOrderDoc);
     const newTask = req.body as Task;
     newTask.sortOrder = currentHighestSortOrderDoc.sortOrder! + 1;
     const result = await collections.tasks?.insertOne(newTask);
     result
-      ? res
-          .status(201)
-          .send(`Successfully created a new task with id ${result.insertedId}`)
+      ? res.status(201).send(newTask)
       : res.status(500).send("Failed to create a new task.");
   } catch (error: any) {
     console.error(error);
@@ -78,3 +75,20 @@ tasksRouter.post("/createTask", async (req: Request, res: Response) => {
 // PUT
 
 // DELETE
+tasksRouter.delete("/deleteTask/:id", async (req: Request, res: Response) => {
+  const id = req?.params.id;
+
+  try {
+    const query = { _id: new ObjectId(id) };
+    const result = await collections.tasks?.deleteOne(query);
+
+    if (result?.deletedCount === 1) {
+      res.status(204).send();
+    } else {
+      res.status(404).send(`Task with ID ${id} not found`);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal server error");
+  }
+});
