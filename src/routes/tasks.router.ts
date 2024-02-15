@@ -73,15 +73,37 @@ tasksRouter.post("/createTask", async (req: Request, res: Response) => {
 });
 
 // PUT
+tasksRouter.put("/editTask/:id", async (req: Request, res: Response) => {
+  const id = req?.params.id;
+  console.log(`Received PUT request to /tasks/editTask/${id}`, req.body);
+  try {
+    const newTask = req.body as Task;
+    const query = { _id: new ObjectId(id) };
+
+    const result = await collections.tasks?.updateOne(query, { $set: newTask });
+
+    if (result) {
+      const updatedTask = await collections.tasks?.findOne(query);
+      res.status(200).send({
+        message: `Successfully updated task with id ${id}`,
+        updatedTask: updatedTask,
+      });
+    } else {
+      res.status(304).send(`Task with id: ${id} not updated`);
+    }
+  } catch (error: any) {
+    console.error(error);
+    res.status(400).send(error.message);
+  }
+});
 
 // DELETE
 tasksRouter.delete("/deleteTask/:id", async (req: Request, res: Response) => {
   const id = req?.params.id;
-
+  console.log(`Received DELETE request to /tasks/deleteTask/${id}`, req.body);
   try {
     const query = { _id: new ObjectId(id) };
     const result = await collections.tasks?.deleteOne(query);
-
     if (result?.deletedCount === 1) {
       res.status(204).send();
     } else {

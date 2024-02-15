@@ -75,13 +75,38 @@ exports.tasksRouter.post("/createTask", (req, res) => __awaiter(void 0, void 0, 
     }
 }));
 // PUT
+exports.tasksRouter.put("/editTask/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _e, _f;
+    const id = req === null || req === void 0 ? void 0 : req.params.id;
+    console.log(`Received PUT request to /tasks/editTask/${id}`, req.body);
+    try {
+        const newTask = req.body;
+        const query = { _id: new mongodb_1.ObjectId(id) };
+        const result = yield ((_e = database_service_1.collections.tasks) === null || _e === void 0 ? void 0 : _e.updateOne(query, { $set: newTask }));
+        if (result) {
+            const updatedTask = yield ((_f = database_service_1.collections.tasks) === null || _f === void 0 ? void 0 : _f.findOne(query));
+            res.status(200).send({
+                message: `Successfully updated task with id ${id}`,
+                updatedTask: updatedTask,
+            });
+        }
+        else {
+            res.status(304).send(`Task with id: ${id} not updated`);
+        }
+    }
+    catch (error) {
+        console.error(error);
+        res.status(400).send(error.message);
+    }
+}));
 // DELETE
 exports.tasksRouter.delete("/deleteTask/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _e;
+    var _g;
     const id = req === null || req === void 0 ? void 0 : req.params.id;
+    console.log(`Received DELETE request to /tasks/deleteTask/${id}`, req.body);
     try {
         const query = { _id: new mongodb_1.ObjectId(id) };
-        const result = yield ((_e = database_service_1.collections.tasks) === null || _e === void 0 ? void 0 : _e.deleteOne(query));
+        const result = yield ((_g = database_service_1.collections.tasks) === null || _g === void 0 ? void 0 : _g.deleteOne(query));
         if ((result === null || result === void 0 ? void 0 : result.deletedCount) === 1) {
             res.status(204).send();
         }
