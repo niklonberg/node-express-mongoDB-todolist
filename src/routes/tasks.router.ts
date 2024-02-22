@@ -21,6 +21,7 @@ tasksRouter.use(
 
 tasksRouter.use(express.json());
 
+/**************** TASK ROUTES ****************/
 // GET ALL
 tasksRouter.get("/", async (_req: Request, res: Response) => {
   try {
@@ -73,6 +74,7 @@ tasksRouter.post("/createTask", async (req: Request, res: Response) => {
 });
 
 // PUT
+// edit task
 tasksRouter.put("/editTask/:id", async (req: Request, res: Response) => {
   const id = req?.params.id;
   console.log(`Received PUT request to /tasks/editTask/${id}`, req.body);
@@ -98,6 +100,7 @@ tasksRouter.put("/editTask/:id", async (req: Request, res: Response) => {
 });
 
 // DELETE
+// delete task
 tasksRouter.delete("/deleteTask/:id", async (req: Request, res: Response) => {
   const id = req?.params.id;
   console.log(`Received DELETE request to /tasks/deleteTask/${id}`, req.body);
@@ -112,5 +115,25 @@ tasksRouter.delete("/deleteTask/:id", async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");
+  }
+});
+
+/**************** SUBTASK ROUTES ****************/
+tasksRouter.post("/createSubtask", async (req: Request, res: Response) => {
+  console.log("Received POST request to /tasks/Subtask:", req.body);
+  try {
+    const currentHighestSortOrderDoc = (await collections.tasks?.findOne(
+      {},
+      { sort: { sortOrder: -1 } }
+    )) as Task;
+    const newTask = req.body as Task;
+    newTask.sortOrder = currentHighestSortOrderDoc.sortOrder! + 1;
+    const result = await collections.tasks?.insertOne(newTask);
+    result
+      ? res.status(201).send(newTask)
+      : res.status(500).send("Failed to create a new task.");
+  } catch (error: any) {
+    console.error(error);
+    res.status(400).send(error.message);
   }
 });

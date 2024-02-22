@@ -28,6 +28,7 @@ exports.tasksRouter.use(cors({
     methods: "GET,POST,PUT,DELETE",
 }));
 exports.tasksRouter.use(express_1.default.json());
+/**************** TASK ROUTES ****************/
 // GET ALL
 exports.tasksRouter.get("/", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
@@ -75,6 +76,7 @@ exports.tasksRouter.post("/createTask", (req, res) => __awaiter(void 0, void 0, 
     }
 }));
 // PUT
+// edit task
 exports.tasksRouter.put("/editTask/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _e, _f;
     const id = req === null || req === void 0 ? void 0 : req.params.id;
@@ -100,6 +102,7 @@ exports.tasksRouter.put("/editTask/:id", (req, res) => __awaiter(void 0, void 0,
     }
 }));
 // DELETE
+// delete task
 exports.tasksRouter.delete("/deleteTask/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _g;
     const id = req === null || req === void 0 ? void 0 : req.params.id;
@@ -117,5 +120,23 @@ exports.tasksRouter.delete("/deleteTask/:id", (req, res) => __awaiter(void 0, vo
     catch (error) {
         console.error(error);
         res.status(500).send("Internal server error");
+    }
+}));
+/**************** SUBTASK ROUTES ****************/
+exports.tasksRouter.post("/createSubtask", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _h, _j;
+    console.log("Received POST request to /tasks/Subtask:", req.body);
+    try {
+        const currentHighestSortOrderDoc = (yield ((_h = database_service_1.collections.tasks) === null || _h === void 0 ? void 0 : _h.findOne({}, { sort: { sortOrder: -1 } })));
+        const newTask = req.body;
+        newTask.sortOrder = currentHighestSortOrderDoc.sortOrder + 1;
+        const result = yield ((_j = database_service_1.collections.tasks) === null || _j === void 0 ? void 0 : _j.insertOne(newTask));
+        result
+            ? res.status(201).send(newTask)
+            : res.status(500).send("Failed to create a new task.");
+    }
+    catch (error) {
+        console.error(error);
+        res.status(400).send(error.message);
     }
 }));
