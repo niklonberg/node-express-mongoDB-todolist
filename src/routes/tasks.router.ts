@@ -123,11 +123,10 @@ tasksRouter.delete("/deleteTask/:id", async (req: Request, res: Response) => {
 // create subtask
 tasksRouter.put("/createSubtask/:id", async (req: Request, res: Response) => {
   const id = req?.params.id;
-  console.log(`Received POST request to /tasks/createSubtask/${id}`, req.body);
+  console.log(`Received PUT request to /tasks/createSubtask/${id}`, req.body);
   try {
     const newSubtask = req.body as Task;
     const query = { _id: new ObjectId(id) };
-    // insert newSubtask into its .subtasks array
     const result = await collections.tasks?.findOneAndUpdate(
       query,
       {
@@ -135,11 +134,51 @@ tasksRouter.put("/createSubtask/:id", async (req: Request, res: Response) => {
       },
       { returnDocument: "after" }
     );
-    console.log("I logged! result: ", result);
-    // return i think mongodb update one returns something if success, which you can send back as response
-    // const result
+    result
+      ? res.status(200).send(result)
+      : res
+          .status(400)
+          .send("failed to update task.subtasks with newly created subtask");
   } catch (error: any) {
     console.error(error);
-    res.status(400).send(error.message);
+    res.status(500).send(error.message);
   }
 });
+
+// PUT
+// delete subtask
+tasksRouter.put(
+  "/deleteSubtask/:subtaskIndex/:id",
+  async (req: Request, res: Response) => {
+    const subtaskIndex = Number(req?.params.subtaskIndex);
+    const id = req?.params.id;
+    console.log(
+      `Received PUT request to /tasks/deleteSubtask/${subtaskIndex}/${id}`,
+      req.body
+    );
+    try {
+      const query = { _id: new ObjectId(id) };
+      const taskToUpdate = await collections.tasks?.findOne(query);
+
+      if (taskToUpdate) {
+        taskToUpdate.subtasks.splice(subtaskIndex, 1);
+
+        const result = await collections.tasks?.findOneAndUpdate(
+          query,
+          {
+            $set: { subtasks: taskToUpdate.subtasks },
+          },
+          { returnDocument: "after" }
+        );
+        result
+          ? res.status(200).send(result)
+          : res.status(404).send("Subtask deletion failed");
+      } else {
+        res.status(404).send("Task not found");
+      }
+    } catch (error: any) {
+      console.error(error);
+      res.status(500).send(error.message);
+    }
+  }
+);

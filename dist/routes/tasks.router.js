@@ -128,20 +128,49 @@ exports.tasksRouter.delete("/deleteTask/:id", (req, res) => __awaiter(void 0, vo
 exports.tasksRouter.put("/createSubtask/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _h;
     const id = req === null || req === void 0 ? void 0 : req.params.id;
-    console.log(`Received POST request to /tasks/createSubtask/${id}`, req.body);
+    console.log(`Received PUT request to /tasks/createSubtask/${id}`, req.body);
     try {
         const newSubtask = req.body;
         const query = { _id: new mongodb_1.ObjectId(id) };
-        // insert newSubtask into its .subtasks array
         const result = yield ((_h = database_service_1.collections.tasks) === null || _h === void 0 ? void 0 : _h.findOneAndUpdate(query, {
             $push: { subtasks: newSubtask },
         }, { returnDocument: "after" }));
-        console.log("I logged! result: ", result);
-        // return i think mongodb update one returns something if success, which you can send back as response
-        // const result
+        result
+            ? res.status(200).send(result)
+            : res
+                .status(400)
+                .send("failed to update task.subtasks with newly created subtask");
     }
     catch (error) {
         console.error(error);
-        res.status(400).send(error.message);
+        res.status(500).send(error.message);
+    }
+}));
+// PUT
+// delete subtask
+exports.tasksRouter.put("/deleteSubtask/:subtaskIndex/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _j, _k;
+    const subtaskIndex = Number(req === null || req === void 0 ? void 0 : req.params.subtaskIndex);
+    const id = req === null || req === void 0 ? void 0 : req.params.id;
+    console.log(`Received PUT request to /tasks/deleteSubtask/${subtaskIndex}/${id}`, req.body);
+    try {
+        const query = { _id: new mongodb_1.ObjectId(id) };
+        const taskToUpdate = yield ((_j = database_service_1.collections.tasks) === null || _j === void 0 ? void 0 : _j.findOne(query));
+        if (taskToUpdate) {
+            taskToUpdate.subtasks.splice(subtaskIndex, 1);
+            const result = yield ((_k = database_service_1.collections.tasks) === null || _k === void 0 ? void 0 : _k.findOneAndUpdate(query, {
+                $set: { subtasks: taskToUpdate.subtasks },
+            }, { returnDocument: "after" }));
+            result
+                ? res.status(200).send(result)
+                : res.status(404).send("Subtask deletion failed");
+        }
+        else {
+            res.status(404).send("Task not found");
+        }
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).send(error.message);
     }
 }));
