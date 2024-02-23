@@ -123,17 +123,22 @@ exports.tasksRouter.delete("/deleteTask/:id", (req, res) => __awaiter(void 0, vo
     }
 }));
 /**************** SUBTASK ROUTES ****************/
-exports.tasksRouter.post("/createSubtask", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _h, _j;
-    console.log("Received POST request to /tasks/Subtask:", req.body);
+// PUT
+// create subtask
+exports.tasksRouter.put("/createSubtask/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _h;
+    const id = req === null || req === void 0 ? void 0 : req.params.id;
+    console.log(`Received POST request to /tasks/createSubtask/${id}`, req.body);
     try {
-        const currentHighestSortOrderDoc = (yield ((_h = database_service_1.collections.tasks) === null || _h === void 0 ? void 0 : _h.findOne({}, { sort: { sortOrder: -1 } })));
-        const newTask = req.body;
-        newTask.sortOrder = currentHighestSortOrderDoc.sortOrder + 1;
-        const result = yield ((_j = database_service_1.collections.tasks) === null || _j === void 0 ? void 0 : _j.insertOne(newTask));
-        result
-            ? res.status(201).send(newTask)
-            : res.status(500).send("Failed to create a new task.");
+        const newSubtask = req.body;
+        const query = { _id: new mongodb_1.ObjectId(id) };
+        // insert newSubtask into its .subtasks array
+        const result = yield ((_h = database_service_1.collections.tasks) === null || _h === void 0 ? void 0 : _h.findOneAndUpdate(query, {
+            $push: { subtasks: newSubtask },
+        }, { returnDocument: "after" }));
+        console.log("I logged! result: ", result);
+        // return i think mongodb update one returns something if success, which you can send back as response
+        // const result
     }
     catch (error) {
         console.error(error);

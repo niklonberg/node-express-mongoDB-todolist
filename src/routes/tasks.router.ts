@@ -119,19 +119,25 @@ tasksRouter.delete("/deleteTask/:id", async (req: Request, res: Response) => {
 });
 
 /**************** SUBTASK ROUTES ****************/
-tasksRouter.post("/createSubtask", async (req: Request, res: Response) => {
-  console.log("Received POST request to /tasks/Subtask:", req.body);
+// PUT
+// create subtask
+tasksRouter.put("/createSubtask/:id", async (req: Request, res: Response) => {
+  const id = req?.params.id;
+  console.log(`Received POST request to /tasks/createSubtask/${id}`, req.body);
   try {
-    const currentHighestSortOrderDoc = (await collections.tasks?.findOne(
-      {},
-      { sort: { sortOrder: -1 } }
-    )) as Task;
-    const newTask = req.body as Task;
-    newTask.sortOrder = currentHighestSortOrderDoc.sortOrder! + 1;
-    const result = await collections.tasks?.insertOne(newTask);
-    result
-      ? res.status(201).send(newTask)
-      : res.status(500).send("Failed to create a new task.");
+    const newSubtask = req.body as Task;
+    const query = { _id: new ObjectId(id) };
+    // insert newSubtask into its .subtasks array
+    const result = await collections.tasks?.findOneAndUpdate(
+      query,
+      {
+        $push: { subtasks: newSubtask },
+      },
+      { returnDocument: "after" }
+    );
+    console.log("I logged! result: ", result);
+    // return i think mongodb update one returns something if success, which you can send back as response
+    // const result
   } catch (error: any) {
     console.error(error);
     res.status(400).send(error.message);
