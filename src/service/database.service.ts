@@ -1,9 +1,10 @@
 // External Dependencies
 import * as mongoDB from "mongodb";
 import * as dotenv from "dotenv";
+import { Task } from "../utils/interfaces";
 
 // Global Variables
-export const collections: { tasks?: mongoDB.Collection } = {};
+export const collections: { tasks?: mongoDB.Collection<Task> } = {};
 
 // Initialize Connection
 export async function connectToDatabase() {
@@ -17,7 +18,7 @@ export async function connectToDatabase() {
 
   const db: mongoDB.Db = client.db(process.env.DB_NAME);
 
-  const tasksCollection: mongoDB.Collection = db.collection(
+  const tasksCollection: mongoDB.Collection<Task> = db.collection(
     process.env.COLLECTION_NAME as string
   );
 
