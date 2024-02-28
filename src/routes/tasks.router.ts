@@ -195,17 +195,22 @@ tasksRouter.put(
       const query = { _id: new ObjectId(id) };
       const taskToUpdate = await collections.tasks?.findOne(query);
       if (taskToUpdate) {
-        const switchIsCompletedValue =
+        taskToUpdate.subtasks[subtaskIndex].isCompleted =
           !taskToUpdate.subtasks[subtaskIndex].isCompleted;
+        taskToUpdate.subtasks[subtaskIndex].dateCompleted =
+          req.body.dateCompleted;
         const result = await collections.tasks?.findOneAndUpdate(
           query,
           {
-            $set: {
-              [`subtasks[${subtaskIndex}].isCompleted`]: switchIsCompletedValue,
-            },
+            $set: { subtasks: taskToUpdate.subtasks },
           },
           { returnDocument: "after" }
         );
+        result
+          ? res.status(200).send(result)
+          : res.status(404).send(`toggle subtask.isCompleted failed`);
+      } else {
+        res.status(404).send("Task not found");
       }
     } catch (error) {}
   }

@@ -185,12 +185,19 @@ exports.tasksRouter.put(`/:id/editSubtask/:subtaskIndex`, (req, res) => __awaite
         const query = { _id: new mongodb_1.ObjectId(id) };
         const taskToUpdate = yield ((_l = database_service_1.collections.tasks) === null || _l === void 0 ? void 0 : _l.findOne(query));
         if (taskToUpdate) {
-            const switchIsCompletedValue = !taskToUpdate.subtasks[subtaskIndex].isCompleted;
+            taskToUpdate.subtasks[subtaskIndex].isCompleted =
+                !taskToUpdate.subtasks[subtaskIndex].isCompleted;
+            taskToUpdate.subtasks[subtaskIndex].dateCompleted =
+                req.body.dateCompleted;
             const result = yield ((_m = database_service_1.collections.tasks) === null || _m === void 0 ? void 0 : _m.findOneAndUpdate(query, {
-                $set: {
-                    [`subtasks[${subtaskIndex}].isCompleted`]: switchIsCompletedValue,
-                },
+                $set: { subtasks: taskToUpdate.subtasks },
             }, { returnDocument: "after" }));
+            result
+                ? res.status(200).send(result)
+                : res.status(404).send(`toggle subtask.isCompleted failed`);
+        }
+        else {
+            res.status(404).send("Task not found");
         }
     }
     catch (error) { }
