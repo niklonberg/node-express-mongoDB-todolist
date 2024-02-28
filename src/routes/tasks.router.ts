@@ -28,7 +28,6 @@ tasksRouter.get("/", async (_req: Request, res: Response) => {
     const tasks = (await collections.tasks
       ?.find({}, { sort: { sortOrder: 1 } })
       .toArray()) as Task[];
-
     res.status(200).send(tasks);
   } catch (error: any) {
     res.status(500).send(error.message);
@@ -38,11 +37,9 @@ tasksRouter.get("/", async (_req: Request, res: Response) => {
 // GET ONE BY ID
 tasksRouter.get("/:id", async (req: Request, res: Response) => {
   const id = req?.params.id;
-
   try {
     const query = { _id: new ObjectId(id) };
     const task = (await collections.tasks?.findOne(query)) as Task;
-
     res.status(200).send(task);
   } catch (error) {
     console.error(error);
@@ -54,8 +51,8 @@ tasksRouter.get("/:id", async (req: Request, res: Response) => {
 
 // POST
 // create task
-tasksRouter.post("/createTask", async (req: Request, res: Response) => {
-  console.log("Received POST request to /tasks/createTask:", req.body);
+tasksRouter.post("/", async (req: Request, res: Response) => {
+  console.log("Received POST request to /tasks:", req.body);
   try {
     const currentHighestSortOrderDoc = (await collections.tasks?.findOne(
       {},
@@ -75,9 +72,9 @@ tasksRouter.post("/createTask", async (req: Request, res: Response) => {
 
 // PUT
 // edit task
-tasksRouter.put("/editTask/:id", async (req: Request, res: Response) => {
+tasksRouter.put("/:id", async (req: Request, res: Response) => {
   const id = req?.params.id;
-  console.log(`Received PUT request to /tasks/editTask/${id}`, req.body);
+  console.log(`Received PUT request to /tasks/${id}`, req.body);
   try {
     const newTask = req.body as Task;
     const query = { _id: new ObjectId(id) };
@@ -101,9 +98,9 @@ tasksRouter.put("/editTask/:id", async (req: Request, res: Response) => {
 
 // DELETE
 // delete task
-tasksRouter.delete("/deleteTask/:id", async (req: Request, res: Response) => {
+tasksRouter.delete("/:id", async (req: Request, res: Response) => {
   const id = req?.params.id;
-  console.log(`Received DELETE request to /tasks/deleteTask/${id}`, req.body);
+  console.log(`Received DELETE request to /tasks/${id}`, req.body);
   try {
     const query = { _id: new ObjectId(id) };
     const result = await collections.tasks?.deleteOne(query);
@@ -121,9 +118,9 @@ tasksRouter.delete("/deleteTask/:id", async (req: Request, res: Response) => {
 /**************** SUBTASK ROUTES ****************/
 // PUT
 // create subtask
-tasksRouter.put("/createSubtask/:id", async (req: Request, res: Response) => {
+tasksRouter.put("/:id/createSubtask/", async (req: Request, res: Response) => {
   const id = req?.params.id;
-  console.log(`Received PUT request to /tasks/createSubtask/${id}`, req.body);
+  console.log(`Received PUT request to /tasks/${id}/createSubtask`, req.body);
   try {
     const newSubtask = req.body as Task;
     const query = { _id: new ObjectId(id) };
@@ -148,12 +145,12 @@ tasksRouter.put("/createSubtask/:id", async (req: Request, res: Response) => {
 // PUT
 // delete subtask
 tasksRouter.put(
-  "/deleteSubtask/:subtaskIndex/:id",
+  "/:id/deleteSubtask/:subtaskIndex",
   async (req: Request, res: Response) => {
     const subtaskIndex = Number(req?.params.subtaskIndex);
     const id = req?.params.id;
     console.log(
-      `Received PUT request to /tasks/deleteSubtask/${subtaskIndex}/${id}`,
+      `Received PUT request to /tasks/${id}/deleteSubtask/${subtaskIndex}`,
       req.body
     );
     try {
@@ -180,5 +177,36 @@ tasksRouter.put(
       console.error(error);
       res.status(500).send(error.message);
     }
+  }
+);
+
+//PUT
+//toggle subtask.isCompleted
+tasksRouter.put(
+  `/:id/editSubtask/:subtaskIndex`,
+  async (req: Request, res: Response) => {
+    const subtaskIndex = Number(req?.params.subtaskIndex);
+    const id = req?.params.id;
+    console.log(
+      `Received PUT request to /tasks/${id}/editSubtask/${subtaskIndex}/`,
+      req.body
+    );
+    try {
+      const query = { _id: new ObjectId(id) };
+      const taskToUpdate = await collections.tasks?.findOne(query);
+      if (taskToUpdate) {
+        const switchIsCompletedValue =
+          !taskToUpdate.subtasks[subtaskIndex].isCompleted;
+        const result = await collections.tasks?.findOneAndUpdate(
+          query,
+          {
+            $set: {
+              [`subtasks[${subtaskIndex}].isCompleted`]: switchIsCompletedValue,
+            },
+          },
+          { returnDocument: "after" }
+        );
+      }
+    } catch (error) {}
   }
 );

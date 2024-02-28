@@ -58,9 +58,9 @@ exports.tasksRouter.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
 }));
 // POST
 // create task
-exports.tasksRouter.post("/createTask", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.tasksRouter.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _c, _d;
-    console.log("Received POST request to /tasks/createTask:", req.body);
+    console.log("Received POST request to /tasks:", req.body);
     try {
         const currentHighestSortOrderDoc = (yield ((_c = database_service_1.collections.tasks) === null || _c === void 0 ? void 0 : _c.findOne({}, { sort: { sortOrder: -1 } })));
         const newTask = req.body;
@@ -77,10 +77,10 @@ exports.tasksRouter.post("/createTask", (req, res) => __awaiter(void 0, void 0, 
 }));
 // PUT
 // edit task
-exports.tasksRouter.put("/editTask/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.tasksRouter.put("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _e, _f;
     const id = req === null || req === void 0 ? void 0 : req.params.id;
-    console.log(`Received PUT request to /tasks/editTask/${id}`, req.body);
+    console.log(`Received PUT request to /tasks/${id}`, req.body);
     try {
         const newTask = req.body;
         const query = { _id: new mongodb_1.ObjectId(id) };
@@ -103,10 +103,10 @@ exports.tasksRouter.put("/editTask/:id", (req, res) => __awaiter(void 0, void 0,
 }));
 // DELETE
 // delete task
-exports.tasksRouter.delete("/deleteTask/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.tasksRouter.delete("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _g;
     const id = req === null || req === void 0 ? void 0 : req.params.id;
-    console.log(`Received DELETE request to /tasks/deleteTask/${id}`, req.body);
+    console.log(`Received DELETE request to /tasks/${id}`, req.body);
     try {
         const query = { _id: new mongodb_1.ObjectId(id) };
         const result = yield ((_g = database_service_1.collections.tasks) === null || _g === void 0 ? void 0 : _g.deleteOne(query));
@@ -125,10 +125,10 @@ exports.tasksRouter.delete("/deleteTask/:id", (req, res) => __awaiter(void 0, vo
 /**************** SUBTASK ROUTES ****************/
 // PUT
 // create subtask
-exports.tasksRouter.put("/createSubtask/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.tasksRouter.put("/:id/createSubtask/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _h;
     const id = req === null || req === void 0 ? void 0 : req.params.id;
-    console.log(`Received PUT request to /tasks/createSubtask/${id}`, req.body);
+    console.log(`Received PUT request to /tasks/${id}/createSubtask`, req.body);
     try {
         const newSubtask = req.body;
         const query = { _id: new mongodb_1.ObjectId(id) };
@@ -148,11 +148,11 @@ exports.tasksRouter.put("/createSubtask/:id", (req, res) => __awaiter(void 0, vo
 }));
 // PUT
 // delete subtask
-exports.tasksRouter.put("/deleteSubtask/:subtaskIndex/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.tasksRouter.put("/:id/deleteSubtask/:subtaskIndex", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _j, _k;
     const subtaskIndex = Number(req === null || req === void 0 ? void 0 : req.params.subtaskIndex);
     const id = req === null || req === void 0 ? void 0 : req.params.id;
-    console.log(`Received PUT request to /tasks/deleteSubtask/${subtaskIndex}/${id}`, req.body);
+    console.log(`Received PUT request to /tasks/${id}/deleteSubtask/${subtaskIndex}`, req.body);
     try {
         const query = { _id: new mongodb_1.ObjectId(id) };
         const taskToUpdate = yield ((_j = database_service_1.collections.tasks) === null || _j === void 0 ? void 0 : _j.findOne(query));
@@ -173,4 +173,25 @@ exports.tasksRouter.put("/deleteSubtask/:subtaskIndex/:id", (req, res) => __awai
         console.error(error);
         res.status(500).send(error.message);
     }
+}));
+//PUT
+//toggle subtask.isCompleted
+exports.tasksRouter.put(`/:id/editSubtask/:subtaskIndex`, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _l, _m;
+    const subtaskIndex = Number(req === null || req === void 0 ? void 0 : req.params.subtaskIndex);
+    const id = req === null || req === void 0 ? void 0 : req.params.id;
+    console.log(`Received PUT request to /tasks/${id}/editSubtask/${subtaskIndex}/`, req.body);
+    try {
+        const query = { _id: new mongodb_1.ObjectId(id) };
+        const taskToUpdate = yield ((_l = database_service_1.collections.tasks) === null || _l === void 0 ? void 0 : _l.findOne(query));
+        if (taskToUpdate) {
+            const switchIsCompletedValue = !taskToUpdate.subtasks[subtaskIndex].isCompleted;
+            const result = yield ((_m = database_service_1.collections.tasks) === null || _m === void 0 ? void 0 : _m.findOneAndUpdate(query, {
+                $set: {
+                    [`subtasks[${subtaskIndex}].isCompleted`]: switchIsCompletedValue,
+                },
+            }, { returnDocument: "after" }));
+        }
+    }
+    catch (error) { }
 }));
