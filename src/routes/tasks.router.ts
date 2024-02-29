@@ -197,8 +197,10 @@ tasksRouter.put(
       if (taskToUpdate) {
         taskToUpdate.subtasks[subtaskIndex].isCompleted =
           !taskToUpdate.subtasks[subtaskIndex].isCompleted;
-        taskToUpdate.subtasks[subtaskIndex].dateCompleted =
-          req.body.dateCompleted;
+        taskToUpdate.subtasks[subtaskIndex].dateCompleted
+          ? (taskToUpdate.subtasks[subtaskIndex].dateCompleted = null)
+          : (taskToUpdate.subtasks[subtaskIndex].dateCompleted =
+              req.body.dateCompleted);
         const result = await collections.tasks?.findOneAndUpdate(
           query,
           {
