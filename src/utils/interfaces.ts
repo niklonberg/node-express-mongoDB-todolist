@@ -6,7 +6,6 @@ export interface Task {
   sortOrder?: number;
   title: string;
   priority: PriorityLevel;
-  isCompleted: boolean;
   dateCompleted: null | Date;
   dueDate: null | Date;
   description: string;

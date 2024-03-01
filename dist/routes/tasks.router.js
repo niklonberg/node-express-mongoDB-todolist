@@ -191,8 +191,6 @@ exports.tasksRouter.put(`/:id/editSubtask/:subtaskIndex`, (req, res) => __awaite
                 ? (taskToUpdate.subtasks[subtaskIndex].dateCompleted = null)
                 : (taskToUpdate.subtasks[subtaskIndex].dateCompleted =
                     req.body.dateCompleted);
-            // taskToUpdate.subtasks[subtaskIndex].dateCompleted =
-            //   req.body.dateCompleted;
             const result = yield ((_m = database_service_1.collections.tasks) === null || _m === void 0 ? void 0 : _m.findOneAndUpdate(query, {
                 $set: { subtasks: taskToUpdate.subtasks },
             }, { returnDocument: "after" }));
