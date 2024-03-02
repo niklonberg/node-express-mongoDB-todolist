@@ -181,22 +181,20 @@ tasksRouter.put(
 );
 
 //PUT
-//toggle subtask.isCompleted
+//toggle subtask.dateCompleted
 tasksRouter.put(
-  `/:id/editSubtask/:subtaskIndex`,
+  `/:id/toggleSubtaskCompleted/:subtaskIndex`,
   async (req: Request, res: Response) => {
     const subtaskIndex = Number(req?.params.subtaskIndex);
     const id = req?.params.id;
     console.log(
-      `Received PUT request to /tasks/${id}/editSubtask/${subtaskIndex}/`,
+      `Received PUT request to /tasks/${id}/toggleSubtaskCompleted/${subtaskIndex}/`,
       req.body
     );
     try {
       const query = { _id: new ObjectId(id) };
       const taskToUpdate = await collections.tasks?.findOne(query);
       if (taskToUpdate) {
-        taskToUpdate.subtasks[subtaskIndex].isCompleted =
-          !taskToUpdate.subtasks[subtaskIndex].isCompleted;
         taskToUpdate.subtasks[subtaskIndex].dateCompleted
           ? (taskToUpdate.subtasks[subtaskIndex].dateCompleted = null)
           : (taskToUpdate.subtasks[subtaskIndex].dateCompleted =
@@ -210,7 +208,7 @@ tasksRouter.put(
         );
         result
           ? res.status(200).send(result)
-          : res.status(404).send(`toggle subtask.isCompleted failed`);
+          : res.status(404).send(`toggle subtask.dateCompleted failed`);
       } else {
         res.status(404).send("Task not found");
       }

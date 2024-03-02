@@ -175,18 +175,16 @@ exports.tasksRouter.put("/:id/deleteSubtask/:subtaskIndex", (req, res) => __awai
     }
 }));
 //PUT
-//toggle subtask.isCompleted
-exports.tasksRouter.put(`/:id/editSubtask/:subtaskIndex`, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+//toggle subtask.dateCompleted
+exports.tasksRouter.put(`/:id/toggleSubtaskCompleted/:subtaskIndex`, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _l, _m;
     const subtaskIndex = Number(req === null || req === void 0 ? void 0 : req.params.subtaskIndex);
     const id = req === null || req === void 0 ? void 0 : req.params.id;
-    console.log(`Received PUT request to /tasks/${id}/editSubtask/${subtaskIndex}/`, req.body);
+    console.log(`Received PUT request to /tasks/${id}/toggleSubtaskCompleted/${subtaskIndex}/`, req.body);
     try {
         const query = { _id: new mongodb_1.ObjectId(id) };
         const taskToUpdate = yield ((_l = database_service_1.collections.tasks) === null || _l === void 0 ? void 0 : _l.findOne(query));
         if (taskToUpdate) {
-            taskToUpdate.subtasks[subtaskIndex].isCompleted =
-                !taskToUpdate.subtasks[subtaskIndex].isCompleted;
             taskToUpdate.subtasks[subtaskIndex].dateCompleted
                 ? (taskToUpdate.subtasks[subtaskIndex].dateCompleted = null)
                 : (taskToUpdate.subtasks[subtaskIndex].dateCompleted =
@@ -196,7 +194,7 @@ exports.tasksRouter.put(`/:id/editSubtask/:subtaskIndex`, (req, res) => __awaite
             }, { returnDocument: "after" }));
             result
                 ? res.status(200).send(result)
-                : res.status(404).send(`toggle subtask.isCompleted failed`);
+                : res.status(404).send(`toggle subtask.dateCompleted failed`);
         }
         else {
             res.status(404).send("Task not found");
