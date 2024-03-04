@@ -146,19 +146,48 @@ exports.tasksRouter.put("/:id/createSubtask/", (req, res) => __awaiter(void 0, v
         res.status(500).send(error.message);
     }
 }));
+//PUT
+// edit subtask
+exports.tasksRouter.put("/:id/editSubtask/:subtaskIndex", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _j, _k;
+    const subtaskIndex = Number(req === null || req === void 0 ? void 0 : req.params.subtaskIndex);
+    const id = req === null || req === void 0 ? void 0 : req.params.id;
+    console.log(`Received PUT request to /tasks/${id}/editSubtask/${subtaskIndex}`, req.body);
+    try {
+        const query = { _id: new mongodb_1.ObjectId(id) };
+        const taskToUpdate = yield ((_j = database_service_1.collections.tasks) === null || _j === void 0 ? void 0 : _j.findOne(query));
+        if (taskToUpdate) {
+            const newSubtask = req.body;
+            taskToUpdate.subtasks.splice(subtaskIndex, 1, newSubtask);
+            const result = yield ((_k = database_service_1.collections.tasks) === null || _k === void 0 ? void 0 : _k.findOneAndUpdate(query, {
+                $set: { subtasks: taskToUpdate.subtasks },
+            }, { returnDocument: "after" }));
+            result
+                ? res.status(200).send(result)
+                : res.status(404).send("Subtask edit failed");
+        }
+        else {
+            res.status(404).send("Task not found");
+        }
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).send(error.message);
+    }
+}));
 // PUT
 // delete subtask
 exports.tasksRouter.put("/:id/deleteSubtask/:subtaskIndex", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _j, _k;
+    var _l, _m;
     const subtaskIndex = Number(req === null || req === void 0 ? void 0 : req.params.subtaskIndex);
     const id = req === null || req === void 0 ? void 0 : req.params.id;
     console.log(`Received PUT request to /tasks/${id}/deleteSubtask/${subtaskIndex}`, req.body);
     try {
         const query = { _id: new mongodb_1.ObjectId(id) };
-        const taskToUpdate = yield ((_j = database_service_1.collections.tasks) === null || _j === void 0 ? void 0 : _j.findOne(query));
+        const taskToUpdate = yield ((_l = database_service_1.collections.tasks) === null || _l === void 0 ? void 0 : _l.findOne(query));
         if (taskToUpdate) {
             taskToUpdate.subtasks.splice(subtaskIndex, 1);
-            const result = yield ((_k = database_service_1.collections.tasks) === null || _k === void 0 ? void 0 : _k.findOneAndUpdate(query, {
+            const result = yield ((_m = database_service_1.collections.tasks) === null || _m === void 0 ? void 0 : _m.findOneAndUpdate(query, {
                 $set: { subtasks: taskToUpdate.subtasks },
             }, { returnDocument: "after" }));
             result
@@ -177,19 +206,19 @@ exports.tasksRouter.put("/:id/deleteSubtask/:subtaskIndex", (req, res) => __awai
 //PUT
 //toggle subtask.dateCompleted
 exports.tasksRouter.put(`/:id/toggleSubtaskCompleted/:subtaskIndex`, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _l, _m;
+    var _o, _p;
     const subtaskIndex = Number(req === null || req === void 0 ? void 0 : req.params.subtaskIndex);
     const id = req === null || req === void 0 ? void 0 : req.params.id;
     console.log(`Received PUT request to /tasks/${id}/toggleSubtaskCompleted/${subtaskIndex}/`, req.body);
     try {
         const query = { _id: new mongodb_1.ObjectId(id) };
-        const taskToUpdate = yield ((_l = database_service_1.collections.tasks) === null || _l === void 0 ? void 0 : _l.findOne(query));
+        const taskToUpdate = yield ((_o = database_service_1.collections.tasks) === null || _o === void 0 ? void 0 : _o.findOne(query));
         if (taskToUpdate) {
             taskToUpdate.subtasks[subtaskIndex].dateCompleted
                 ? (taskToUpdate.subtasks[subtaskIndex].dateCompleted = null)
                 : (taskToUpdate.subtasks[subtaskIndex].dateCompleted =
                     req.body.dateCompleted);
-            const result = yield ((_m = database_service_1.collections.tasks) === null || _m === void 0 ? void 0 : _m.findOneAndUpdate(query, {
+            const result = yield ((_p = database_service_1.collections.tasks) === null || _p === void 0 ? void 0 : _p.findOneAndUpdate(query, {
                 $set: { subtasks: taskToUpdate.subtasks },
             }, { returnDocument: "after" }));
             result

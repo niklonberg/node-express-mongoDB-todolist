@@ -142,6 +142,45 @@ tasksRouter.put("/:id/createSubtask/", async (req: Request, res: Response) => {
   }
 });
 
+//PUT
+// edit subtask
+tasksRouter.put(
+  "/:id/editSubtask/:subtaskIndex",
+  async (req: Request, res: Response) => {
+    const subtaskIndex = Number(req?.params.subtaskIndex);
+    const id = req?.params.id;
+    console.log(
+      `Received PUT request to /tasks/${id}/editSubtask/${subtaskIndex}`,
+      req.body
+    );
+    try {
+      const query = { _id: new ObjectId(id) };
+      const taskToUpdate = await collections.tasks?.findOne(query);
+
+      if (taskToUpdate) {
+        const newSubtask = req.body as Task;
+        taskToUpdate.subtasks.splice(subtaskIndex, 1, newSubtask);
+
+        const result = await collections.tasks?.findOneAndUpdate(
+          query,
+          {
+            $set: { subtasks: taskToUpdate.subtasks },
+          },
+          { returnDocument: "after" }
+        );
+        result
+          ? res.status(200).send(result)
+          : res.status(404).send("Subtask edit failed");
+      } else {
+        res.status(404).send("Task not found");
+      }
+    } catch (error: any) {
+      console.error(error);
+      res.status(500).send(error.message);
+    }
+  }
+);
+
 // PUT
 // delete subtask
 tasksRouter.put(
